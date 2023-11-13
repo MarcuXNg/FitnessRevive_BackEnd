@@ -5,7 +5,7 @@ const userService = require('../service/userService.js');
 exports.getAllUser = async (req, res) => {
   const userList = await userService.getAllUser();
   // console.log('check user list:', userList);
-  return res.send({userList});
+  return res.send(userList);
 };
 
 

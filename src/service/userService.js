@@ -68,29 +68,40 @@ const userById = async (id) => {
 
 const getAllUser = async () => {
   // create the connection, specify bluebird as Promise
-  const connection = await mysql.createConnection({
-    host: process.env.HOST || dbConfig.HOST || 'localhost',
-    user: process.env.USER || dbConfig.USER || 'root',
-    password: process.env.PASSWORD || dbConfig.PASSWORD || 'root',
-    database: process.env.DB || dbConfig.DB || 'fitness',
-    Promise: bluebird,
-  });
-  const query1 = 'SELECT * FROM user_account';
-  const query2 = 'SELECT * FROM user_profile';
+
   try {
-    const [rows1] = await connection.execute(query1);
-    const [rows2] = await connection.execute(query2);
+    // const userAccounts = await db.User.findAll();
+    // const userProfiles = await db.UserProfile.findAll();
+    const userAccounts = await db.User.findAll({
+      include: db.UserProfile, // Include user profiles in the query
+    });
 
     // Combine the data based on the common 'id'
-    const mergedData = rows1.map((userAccount) => {
-      const userProfile = rows2.find((profile) => profile.id === userAccount.id);
+    const userList = userAccounts.map((userAccount) => {
+      const {id, email, password, createdAt, updatedAt, UserProfile} = userAccount;
+
       return {
-        ...userAccount,
-        ...(userProfile && {userprofile: userProfile}),
+        id,
+        email,
+        password,
+        createdAt,
+        updatedAt,
+        first_name: UserProfile?.first_name || null,
+        last_name: UserProfile?.last_name || null,
       };
     });
-    // console.log(mergeData);
-    return mergedData;
+    // const mergedData = userAccounts.map((userAccount) => {
+    //   const userProfile = userProfiles.find((profile) => profile.userId === userAccount.id);
+
+    //   return {
+    //     ...userAccount.get({plain: true}),
+    //     ...(userProfile && {userprofile: userProfile.get({plain: true})}),
+    //   };
+    // });
+    // // console.log(mergeData);
+    // return mergedData;
+
+    return {userList};
   } catch (error) {
     console.log(error);
   }
