@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasOne(models.UserProfile, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
     }
   };
   // Object relational mapping
@@ -20,18 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     enc_password: DataTypes.STRING,
     createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'user_account',
+    modelName: 'User',
+    tableName: 'user_account', // Explicitly set the table name
   });
-  // User.init({
-  //   first_name: DataTypes.STRING,
-  //   last_name: DataTypes.STRING,
-  //   userId: DataTypes.INTEGER,
-  //   updatedAt: DataTypes.DATE,
-  // }, {
-  //   sequelize,
-  //   modelName: 'user_profile',
-  // });
+
   return User;
 };

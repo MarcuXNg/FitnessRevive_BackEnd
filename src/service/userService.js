@@ -18,41 +18,29 @@ const hashUserPassword = (userPassword) => {
 
 
 const createNewUser = async (email, password, firstname, lastname) => {
+  // console.log('Received values:', email, password, firstname, lastname);
   const hashPass = hashUserPassword(password.toString());
-  // create the connection, specify bluebird as Promise
-  // const connection = await mysql.createConnection({
-  //   host: process.env.HOST || dbConfig.HOST || 'localhost',
-  //   user: process.env.USER || dbConfig.USER || 'root',
-  //   password: process.env.PASSWORD || dbConfig.PASSWORD || 'root',
-  //   database: process.env.DB || dbConfig.DB || 'fitness',
-  //   Promise: bluebird,
-  // });
 
   const currentTimestamp = new Date(); // Get the current timestamp
 
-  // const query1 = 'INSERT INTO user_account (email, enc_password, createdAt) VALUES (?, ?, ?)';
-  // const query2 = 'INSERT INTO user_profile (first_name, last_name, userId, updatedAt) VALUES (?, ?, ?, ?)';
   try {
-    console.log(Object.keys(db));
-    await db.User.create({
+    const newUser = await db.User.create({
       email: email,
       enc_password: hashPass,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
+    },
+    );
+
+    const userId = newUser.id;
+
+    await db.UserProfile.create({
+      first_name: firstname,
+      last_name: lastname,
+      userId: userId,
+      createdAt: currentTimestamp,
+      updatedAt: currentTimestamp,
     });
-
-    // const [userAccountResult] = await connection.execute(query1, [email, hashPass, currentTimestamp]);
-    // const userId = userAccountResult.insertId;
-    // await connection.execute(query2, [firstname, lastname, userId, currentTimestamp]);
-    // console.log(rows);
-    // return rows;
-
-    // await db.User.create({
-    //   first_name: firstname,
-    //   last_name: lastname,
-    //   userId: userId,
-    //   updatedAt: currentTimestamp,
-    // });
   } catch (error) {
     console.log(error);
   }

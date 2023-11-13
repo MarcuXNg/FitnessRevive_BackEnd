@@ -1,7 +1,7 @@
 const userService = require('../service/userService.js');
 
 // Create and Save a new Tutorial
-exports.createNewUser = (req, res) => {
+exports.createNewUser = async (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -13,7 +13,7 @@ exports.createNewUser = (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
 
-  userService.createNewUser(email, password);
+  await userService.createNewUser(email, password, firstname, lastname);
   // console.log('>>>check req', req.body);
   res.status(200).redirect('http://localhost:3000/user');
 };
@@ -24,7 +24,7 @@ exports.userById = async (req, res) => {
   if (!user) {
     return res.status(404).send('404 NOT FOUND');
   }
-  console.log(req.params.id);
+  // console.log(req.params.id);
   return res.send(user);
 };
 
