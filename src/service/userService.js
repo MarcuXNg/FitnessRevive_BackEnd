@@ -1,9 +1,9 @@
 // const sql = require('../models/db.js');
 // get the client
-const mysql = require('mysql2/promise');
+// const mysql = require('mysql2/promise');
 
 // get the promise implementation, we will use bluebird
-const bluebird = require('bluebird');
+// const bluebird = require('bluebird');
 
 import bcrypt from 'bcrypt';
 import db from '../models/index.js';
@@ -48,19 +48,19 @@ const createNewUser = async (email, password, firstname, lastname) => {
 
 
 const userById = async (id) => {
-  // create the connection, specify bluebird as Promise
-  const connection = await mysql.createConnection({
-    host: process.env.HOST || dbConfig.HOST || 'localhost',
-    user: process.env.USER || dbConfig.USER || 'root',
-    password: process.env.PASSWORD || dbConfig.PASSWORD || 'root',
-    database: process.env.DB || dbConfig.DB || 'fitness',
-    Promise: bluebird,
-  });
-  const query = `SELECT * FROM user_account WHERE id =?`;
   try {
-    const [rows, fields] = await connection.execute(query, [id]);
-    // console.log(rows);
-    return rows[0];
+    let user = {};
+
+    user = await db.User.findOne({
+      where: {id: id},
+      include: db.UserProfile,
+    });
+    if (user === null) {
+      console.log('Not found!');
+    };
+    // console.log(user, id);
+    const userdata = user.get({plain: true}); // user as object
+    return userdata;
   } catch (error) {
     console.log(error);
   }
@@ -101,65 +101,40 @@ const getAllUser = async () => {
     // // console.log(mergeData);
     // return mergedData;
 
-    return {userList};
+    return userList;
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateUserByID = async (id, tutorial, result) => {
-  // create the connection, specify bluebird as Promise
-  const connection = await mysql.createConnection({
-    host: process.env.HOST || dbConfig.HOST || 'localhost',
-    user: process.env.USER || dbConfig.USER || 'root',
-    password: process.env.PASSWORD || dbConfig.PASSWORD || 'root',
-    database: process.env.DB || dbConfig.DB || 'fitness',
-    Promise: bluebird,
+const updateUserByID = async (id, email, firstname, lastname) => {
+  // Find the user by id and include the associated profile
+  const user = await db.User.findByPk(userId, {
+    include: db.UserProfile,
   });
-  const query = 'SELECT * FROM user_account WHERE id=?';
-  try {
-    const [rows, fields] = await connection.execute(query, [id]);
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
-  // sql.query(
-  //     'UPDATE tutorials SET title = ?, description = ?, published = ? WHERE id = ?',
-  //     [tutorial.title, tutorial.description, tutorial.published, id],
-  //     (err, res) => {
-  //       if (err) {
-  //         console.log('error: ', err);
-  //         result(null, err);
-  //         return;
-  //       }
-
-  //       if (res.affectedRows == 0) {
-  //       // not found Tutorial with the id
-  //         result({kind: 'not_found'}, null);
-  //         return;
-  //       }
-
-  //       console.log('updated tutorial: ', {id: id, ...tutorial});
-  //       result(null, {id: id, ...tutorial});
-  //     },
-  // );
+  await user.update(
+      {email: email,
+        first_name: firstname,
+        last_name: lastname},
+      {
+        where: {
+          id: id,
+        },
+      },
+  );
 };
 
-const deleteUser = async (id) => {
-  // create the connection, specify bluebird as Promise
-  const connection = await mysql.createConnection({
-    host: process.env.HOST || dbConfig.HOST || 'localhost',
-    user: process.env.USER || dbConfig.USER || 'root',
-    password: process.env.PASSWORD || dbConfig.PASSWORD || 'root',
-    database: process.env.DB || dbConfig.DB || 'fitness',
-    Promise: bluebird,
-  });
-  const query1 = 'DELETE FROM user_account WHERE id=?';
-  const query2 = 'DELETE FROM user_profile WHERE userId=?';
+const deleteUser = async (userId) => {
   try {
-    const [rows1] = await connection.execute(query1, [id]);
-    const [rows2] = await connection.execute(query2, [id]);
-    return {rows1, rows2};
+    // Find the user by id and include the associated profile
+    const user = await db.User.findByPk(userId, {
+      include: db.UserProfile,
+    });
+
+    if (user) {
+      // Destroy the user and its associated profile
+      await user.destroy();
+    };
   } catch (error) {
     console.log(error);
   }

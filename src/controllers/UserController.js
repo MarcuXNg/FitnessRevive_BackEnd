@@ -15,17 +15,21 @@ exports.createNewUser = async (req, res) => {
 
   await userService.createNewUser(email, password, firstname, lastname);
   // console.log('>>>check req', req.body);
-  res.status(200).redirect('http://localhost:3000/user');
+  res.status(200).send('Success');
+  // .redirect('http://localhost:3000/user')
 };
 
 // Find a single Tutorial by Id
 exports.userById = async (req, res) => {
-  const user = await userService.userById(req.params.id);
+  const id = req.params.id;
+  const user = await userService.userById(id);
+  let userData = {};
   if (!user) {
     return res.status(404).send('404 NOT FOUND');
   }
+  userData = user;
   // console.log(req.params.id);
-  return res.send(user);
+  return res.send(userData);
 };
 
 // // Update a Tutorial identified by the id in the request

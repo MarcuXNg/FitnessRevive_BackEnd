@@ -1,5 +1,6 @@
 const {Sequelize} = require('sequelize');
 const dbConfig = require('./config.js');
+require('dotenv').config();
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {

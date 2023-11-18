@@ -39,7 +39,7 @@ exports.getAllUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   // console.log(req.params.id);
   await userService.deleteUser(req.params.id);
-  return res.redirect('http://localhost:3000');
+  return res.redirect('http://localhost:3000/admin');
 };
 
 // // Delete all Tutorials from the database.
@@ -55,12 +55,11 @@ exports.deleteUser = async (req, res) => {
 // };
 
 // Update a Tutorial identified by the id in the request
-exports.getUpdate = async (req, res) => {
+exports.getUpdateUserPage = async (req, res) => {
   // Validate Request
   const id = req.params.id;
   const user = await userService.updateUserByID(id);
   let userData = {};
-  if (user && user.length > 0) {
-    userData = user[0];
-  };
+  userData = user;
+  console.log(userData);
 };

@@ -14,7 +14,7 @@
     "mysql",
     "restapi"
   ],
-  "author": "bezkoder",
+  "author": "MarcuX",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.15.4",
