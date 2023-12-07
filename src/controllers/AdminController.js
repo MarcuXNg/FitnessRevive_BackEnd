@@ -2,11 +2,23 @@ const userService = require('../service/userService.js');
 
 
 // Retrieve all Tutorials from the database (with condition).
-exports.getAllUser = async (req, res) => {
-  const userList = await userService.getAllUser();
-  // console.log('check user list:', userList);
-  return res.send(userList);
-};
+// exports.getAllUser = async (req, res) => {
+//   try {
+//     const data = await userService.getAllUser();
+//     return res.status(200).json({
+//       EM: data.EM,
+//       EC: data.EC, // error code
+//       DT: data.DT, // date
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({
+//       EM: 'error from server', // error message
+//       EC: '-1', // error code
+//       DT: '', // date
+//     });
+//   }
+// };
 
 
 // // Update a Tutorial identified by the id in the request

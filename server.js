@@ -1,23 +1,15 @@
-// const express = require('express');
+/* eslint-disable prefer-const */
 import express from 'express';
 // const bodyParser = require("body-parser"); /* deprecated */
-const cors = require('cors');
 
-import initWebRoutes from './src/routes/routes.js';
+import {initWebRoutes} from './src/routes/routes.js';
 import configcors from './src/config/cors.js';
-import connection from './src/config/connectDB.js';
-
-// import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+// import connection from './src/config/connectDB.js';
 
 require('dotenv').config();
 
 const app = express();
-
-// const corsOptions = {
-//   origin: process.env.Frontend || 'http://localhost:3000', // connect to frontend localhost:3000
-// };
-
-// app.use(cors(corsOptions));
 
 // config cors
 configcors(app);
@@ -28,8 +20,11 @@ app.use(express.json()); /* bodyParser.json() is deprecated */
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true})); /* bodyParser.urlencoded() is deprecated */
 
+// config cookie-parser
+app.use(cookieParser());
+
 // test connection db
-connection();
+// connection();
 
 // simple route
 app.get('/', (req, res) => {

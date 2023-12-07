@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 // import userService from '../service/userService.js';
 import registerService from '../service/registerService.js';
 import loginService from '../service/loginService.js';
@@ -43,7 +44,11 @@ const handleRegister = async (req, res) => {
 // handle Login
 const handleLogin = async (req, res) => {
   try {
-    const data = await loginService.handleUserLogin(req.body);
+    let data = await loginService.handleUserLogin(req.body);
+    // set cookie
+    if (data && data.DT && data.DT.access_token) {
+      res.cookie('jwt', data.DT.access_token, {httpOnly: true, maxAge: 60 * 60 * 1000});
+    }
 
     return res.status(200).json({
       EM: data.EM, // error message

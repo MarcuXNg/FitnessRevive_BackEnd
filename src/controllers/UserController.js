@@ -1,7 +1,7 @@
-const userService = require('../service/userService.js');
+import userService from '../service/userService.js';
 
-// Create and Save a new Tutorial
-exports.createNewUser = async (req, res) => {
+// Create a new user
+const createNewUser = async (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -20,7 +20,7 @@ exports.createNewUser = async (req, res) => {
 };
 
 // Find a single Tutorial by Id
-exports.userById = async (req, res) => {
+const userById = async (req, res) => {
   const id = req.params.id;
   const user = await userService.userById(id);
   let userData = {};
@@ -31,6 +31,39 @@ exports.userById = async (req, res) => {
   // console.log(req.params.id);
   return res.send(userData);
 };
+
+// get All User
+const getAllUser = async (req, res) => {
+  try {
+    const data = await userService.getAllUser();
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC, // error code
+      DT: data.DT, // date
+    });
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({
+      EM: 'error from server', // error message
+      EC: '-1', // error code
+      DT: '', // date
+    });
+  }
+};
+
+const getUserAccount = async (req, res) => {
+  return res.status(200).json({
+    EM: 'ok',
+    EC: 0, // error code
+    DT: {
+      access_token: req.token,
+      groupWithRoles: req.user.groupWithRoles,
+      email: req.user.email,
+      username: req.user.username,
+    },
+  });
+};
+
 
 // // Update a Tutorial identified by the id in the request
 // exports.getUpdate = async (req, res) => {
@@ -63,3 +96,9 @@ exports.userById = async (req, res) => {
 //   });
 // };
 
+module.exports = {
+  createNewUser,
+  userById,
+  getAllUser,
+  getUserAccount,
+};

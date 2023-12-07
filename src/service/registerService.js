@@ -54,12 +54,13 @@ const registerNewUser = async (rawUserData) => {
       first_name: rawUserData.firstname,
       last_name: rawUserData.lastname,
       userId: userId,
+      groupId: 4,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
     });
     return {
       EM: 'A user is created successully',
-      EC: '0',
+      EC: 0,
     };
   } catch (e) {
     console.log(e);

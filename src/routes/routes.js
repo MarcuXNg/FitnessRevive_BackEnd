@@ -1,18 +1,21 @@
+/* eslint-disable require-jsdoc */
 /**
  * config all api routes
  */
-import {createNewUser, userById} from '../controllers/UserController.js';
-import {getAllUser, deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
+import {createNewUser, userById, getAllUser, getUserAccount} from '../controllers/UserController.js';
+import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
 import {handleRegister, handleLogin} from '../controllers/loginRegisterController.js';
+import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js';
 import express from 'express';
 const router = express.Router();
-// const {handleRegister} = require('../controllers/loginRegisterController.js');
 
-module.exports = (app) => {
+const initWebRoutes = (app) => {
   // path handler
 
+
+  router.all('*', checkUserJWT, checkUserPermission);
   // Create a new Tutorial
-  router.post('/', createNewUser);
+  // router.post('/', createNewUser);
 
   // register
   router.post('/register', handleRegister);
@@ -20,22 +23,30 @@ module.exports = (app) => {
   // Login
   router.post('/login', handleLogin);
 
-  // Retrieve all Tutorials
-  router.get('/', getAllUser);
+  //
+  router.get('/account', getUserAccount);
+
+  // Retrieve all All UserData
+  router.get('/users', getAllUser);
 
   // Retrieve a single Tutorial with id
-  router.get('/:id', userById);
+  router.get('/users/:id', userById);
 
   // Update a Tutorial with id
   // router.put('/:id', tutorials.update);
-  router.post('/update-user/:id', getUpdateUserPage);
+  router.post('users/update/:id', getUpdateUserPage);
 
   // // Delete a user with id
-  router.delete('/:id', deleteUser);
-  router.post('/delete-user/:id', deleteUser);
+  router.delete('/users/:id', deleteUser);
+  // router.post('/delete-user/:id', deleteUser);
 
   // // Delete all Tutorials
   // router.delete('/', tutorials.deleteAll);
 
-  app.use('/api/v1', router);
+  return app.use('/api/v1/', router);
+};
+
+
+module.exports = {
+  initWebRoutes,
 };

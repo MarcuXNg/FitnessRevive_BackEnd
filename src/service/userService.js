@@ -1,10 +1,3 @@
-// const sql = require('../models/db.js');
-// get the client
-// const mysql = require('mysql2/promise');
-
-// get the promise implementation, we will use bluebird
-// const bluebird = require('bluebird');
-
 import bcrypt from 'bcrypt';
 import db from '../models/index.js';
 
@@ -37,6 +30,7 @@ const createNewUser = async (email, password, firstname, lastname) => {
     await db.UserProfile.create({
       first_name: firstname,
       last_name: lastname,
+      groupId: 4,
       userId: userId,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
@@ -67,61 +61,68 @@ const userById = async (id) => {
 };
 
 const getAllUser = async () => {
-  // create the connection, specify bluebird as Promise
-
   try {
-    // const userAccounts = await db.User.findAll();
-    // const userProfiles = await db.UserProfile.findAll();
-    const userAccounts = await db.User.findAll({
-      include: db.UserProfile, // Include user profiles in the query
+    const newUser = await db.UserProfile.findOne({
+      where: {id: 1},
+      include: {model: db.Group},
+      raw: true,
     });
-
-    // Combine the data based on the common 'id'
-    const userList = userAccounts.map((userAccount) => {
-      const {id, email, password, createdAt, updatedAt, UserProfile} = userAccount;
-
+    // console.log(newUser);
+    const userAccounts = await db.UserProfile.findAll({
+      attributes: ['first_name', 'last_name'],
+      include: [
+        {model: db.User, attributes: ['id', 'email', 'createdAt', 'updatedAt']},
+        {model: db.Group, attributes: ['id', 'name', 'description']},
+      ], // Include user profiles in the query
+    });
+    if (userAccounts) {
       return {
-        id,
-        email,
-        password,
-        createdAt,
-        updatedAt,
-        first_name: UserProfile?.first_name || null,
-        last_name: UserProfile?.last_name || null,
+        EM: 'get data success',
+        EC: 0,
+        DT: userAccounts,
+
       };
-    });
-    // const mergedData = userAccounts.map((userAccount) => {
-    //   const userProfile = userProfiles.find((profile) => profile.userId === userAccount.id);
-
-    //   return {
-    //     ...userAccount.get({plain: true}),
-    //     ...(userProfile && {userprofile: userProfile.get({plain: true})}),
-    //   };
-    // });
-    // // console.log(mergeData);
-    // return mergedData;
-
-    return userList;
+    } else {
+      return {
+        EM: 'get data success',
+        EC: 0,
+        DT: [],
+      };
+    }
   } catch (error) {
     console.log(error);
+    return {
+      EM: 'Something wrong with service',
+      EC: 1,
+      DT: [],
+    };
   }
 };
 
 const updateUserByID = async (id, email, firstname, lastname) => {
-  // Find the user by id and include the associated profile
-  const user = await db.User.findByPk(userId, {
-    include: db.UserProfile,
-  });
-  await user.update(
-      {email: email,
-        first_name: firstname,
-        last_name: lastname},
-      {
-        where: {
-          id: id,
-        },
-      },
-  );
+  try {
+    // Find the user by id and include the associated profile
+    const user = await db.User.findByPk(userId, {
+      include: db.UserProfile,
+    });
+
+    if (user) {
+      await user.update(
+          {email: email,
+            first_name: firstname,
+            last_name: lastname},
+          {
+            where: {
+              id: id,
+            },
+          },
+      );
+    } else {
+
+    };
+  } catch (error) {
+
+  }
 };
 
 const deleteUser = async (userId) => {
