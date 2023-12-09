@@ -2,10 +2,11 @@
 /**
  * config all api routes
  */
-import {createNewUser, userById, getAllUser, getUserAccount} from '../controllers/UserController.js';
+import {userById, getAllUser, getUserAccount} from '../controllers/UserController.js';
 import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
-import {handleRegister, handleLogin} from '../controllers/loginRegisterController.js';
+import {handleRegister, handleLogin, handleLogout} from '../controllers/loginRegisterController.js';
 import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js';
+import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc} from '../controllers/RolesController.js';
 import express from 'express';
 const router = express.Router();
 
@@ -17,13 +18,19 @@ const initWebRoutes = (app) => {
   // Create a new Tutorial
   // router.post('/', createNewUser);
 
-  // register
-  router.post('/register', handleRegister);
-
-  // Login
-  router.post('/login', handleLogin);
-
   //
+  router.post('/register', handleRegister); // register
+  router.post('/login', handleLogin); // login
+  router.post('/logout', handleLogout); // logout
+
+  // admin routes
+  // roles routes
+  // router.get('/admin/roles/read', RolesReadFunc);
+  router.post('/admin/roles/create', RolesCreateFunc);
+  // router.put('/admin/roles/update', RolesUpdateFunc);
+  // router.delete('/admin/roles/delete', RolesDeleteFunc);
+
+  // get account state and information for authorization
   router.get('/account', getUserAccount);
 
   // Retrieve all All UserData
