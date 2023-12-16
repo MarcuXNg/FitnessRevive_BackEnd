@@ -1,12 +1,12 @@
-const {Sequelize} = require('sequelize');
-const dbConfig = require('./config.js');
-require('dotenv').config();
+const {Sequelize} = require('sequelize'); // import sequelize
+const dbConfig = require('./config.js'); // import config.js
+require('dotenv').config(); // env
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
+const sequelize = new Sequelize(dbConfig.DB || process.env.DB, dbConfig.USER || process.env.USER, dbConfig.PASSWORD || process.env.PASSWORD, {
+  host: dbConfig.HOST || process.env.HOST,
   dialect: dbConfig.dialect,
-  port: 3306, // Specify the port here
+  port: process.env.DB_PORT || 3306, // Specify the port here
   operatorsAliases: false,
 
   pool: {

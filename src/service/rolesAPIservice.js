@@ -34,6 +34,25 @@ const createNewRoles = async (roles) => {
   }
 };
 
+const getAllRoles = async () => {
+  try {
+    let data = await db.Role.findAll();
+    return {
+      EM: 'get all Roles',
+      EC: 0,
+      DT: data,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrongs with the services',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   createNewRoles,
+  getAllRoles,
 };

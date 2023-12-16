@@ -1,45 +1,52 @@
-import bcrypt from 'bcrypt';
+/* eslint-disable prefer-const */
 import db from '../models/index.js';
+import {checkEmailExist, hashUserPassword} from './registerService.js';
 
-const saltRounds = 10;
-const salt = bcrypt.genSaltSync(saltRounds);
-
-const hashUserPassword = (userPassword) => {
-  const hashPassword = bcrypt.hashSync(userPassword, salt);
-  return hashPassword;
-};
-
-
-const createNewUser = async (email, password, firstname, lastname) => {
-  // console.log('Received values:', email, password, firstname, lastname);
-  const hashPass = hashUserPassword(password.toString());
-
+const createNewUser = async (data) => {
   const currentTimestamp = new Date(); // Get the current timestamp
 
   try {
+    // check Email are exist
+    const isEmailExist = await checkEmailExist(data.email);
+    // console.log(isEmailExist);
+
+    if (isEmailExist === true) {
+      return {
+        EM: 'The email is already exist',
+        EC: 1,
+        Dt: `email`,
+      };
+    }
+    const pass = data.password;
+    // checking user's password
+    const hashPass = hashUserPassword(pass.toString());
+
     const newUser = await db.User.create({
-      email: email,
+      email: data.email,
       enc_password: hashPass,
-      createdAt: currentTimestamp,
-      updatedAt: currentTimestamp,
-    },
-    );
-
+    });
     const userId = newUser.id;
-
     await db.UserProfile.create({
-      first_name: firstname,
-      last_name: lastname,
-      groupId: 4,
+      first_name: data.firstname,
+      last_name: data.lastname,
+      groupId: data.group,
       userId: userId,
+      city: data.city,
+      state: data.state,
+      gender: data.gender,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
     });
+    // console.log('check', data);
+    return {
+      EM: 'create Ok',
+      EC: 0,
+      DT: [],
+    };
   } catch (error) {
     console.log(error);
   }
 };
-
 
 const userById = async (id) => {
   try {
@@ -51,36 +58,72 @@ const userById = async (id) => {
     });
     if (user === null) {
       console.log('Not found!');
-    };
+    }
     // console.log(user, id);
-    const userdata = user.get({plain: true}); // user as object
-    return userdata;
+    // const userdata = user.get({plain: true}); // user as object
+    return user;
   } catch (error) {
     console.log(error);
   }
 };
 
-const getAllUser = async () => {
+// getUserWithPagination
+const getUserWithPagination = async (page, limit) => {
   try {
-    const newUser = await db.UserProfile.findOne({
-      where: {id: 1},
-      include: {model: db.Group},
-      raw: true,
-    });
-    // console.log(newUser);
-    const userAccounts = await db.UserProfile.findAll({
+    let offset = (page -1) * limit;
+    const {count, rows} = await db.UserProfile.findAndCountAll({
+      offset: offset,
+      limit: limit,
+      // sort: '',
       attributes: ['first_name', 'last_name'],
       include: [
         {model: db.User, attributes: ['id', 'email', 'createdAt', 'updatedAt']},
         {model: db.Group, attributes: ['id', 'name', 'description']},
       ], // Include user profiles in the query
+      // raw: true,
+    });
+
+    let totalPages = Math.ceil(count/limit);
+    let data = {
+      totalRows: count,
+      totalPages: totalPages,
+      users: rows,
+    };
+
+    return {
+      EM: 'Fetch Ok',
+      EC: 0,
+      DT: data,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrong with service',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
+// getAllUser
+const getAllUser = async () => {
+  try {
+    const userAccounts = await db.UserProfile.findAll({
+      attributes: ['first_name', 'last_name'],
+      include: [
+        {
+          model: db.User,
+          attributes: ['id', 'email', 'createdAt', 'updatedAt'],
+        },
+        {model: db.Group, attributes: ['id', 'name', 'description']},
+      ], // Include user profiles in the query
+      // raw: true,
     });
     if (userAccounts) {
       return {
         EM: 'get data success',
         EC: 0,
         DT: userAccounts,
-
       };
     } else {
       return {
@@ -108,9 +151,7 @@ const updateUserByID = async (id, email, firstname, lastname) => {
 
     if (user) {
       await user.update(
-          {email: email,
-            first_name: firstname,
-            last_name: lastname},
+          {email: email, first_name: firstname, last_name: lastname},
           {
             where: {
               id: id,
@@ -118,26 +159,42 @@ const updateUserByID = async (id, email, firstname, lastname) => {
           },
       );
     } else {
-
-    };
-  } catch (error) {
-
-  }
+    }
+  } catch (error) {}
 };
 
-const deleteUser = async (userId) => {
+// deleteUser
+const deleteUser = async (id) => {
   try {
-    // Find the user by id and include the associated profile
-    const user = await db.User.findByPk(userId, {
+    // console.log(id);
+    let user = await db.User.findOne({
+      where: {id: id},
       include: db.UserProfile,
     });
 
     if (user) {
       // Destroy the user and its associated profile
+      // console.log(user);
       await user.destroy();
-    };
+      return {
+        EM: 'Delete user successfully',
+        EC: 0,
+        DT: [],
+      };
+    } else {
+      return {
+        EM: 'user not exist',
+        EC: 2,
+        DT: [],
+      };
+    }
   } catch (error) {
     console.log(error);
+    return {
+      EM: 'Something wrong with service',
+      EC: 1,
+      DT: [],
+    };
   }
 };
 
@@ -154,11 +211,11 @@ const deleteUser = async (userId) => {
 //   });
 // };
 
-
 module.exports = {
   createNewUser,
   getAllUser,
   deleteUser,
   userById,
   updateUserByID,
+  getUserWithPagination,
 };

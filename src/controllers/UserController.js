@@ -1,22 +1,27 @@
+/* eslint-disable prefer-const */
 import userService from '../service/userService.js';
 
 // Create a new user
 const createNewUser = async (req, res) => {
-  // Validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
-  const email = req.body.email;
-  const password = req.body.password;
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
+  // // Validate request
+  // if (!req.body) {
+  //   res.status(400).send({
+  //     message: 'Content can not be empty!',
+  //   });
+  // }
+  // const email = req.body.email;
+  // const password = req.body.password;
+  // const firstname = req.body.firstname;
+  // const lastname = req.body.lastname;
 
-  await userService.createNewUser(email, password, firstname, lastname);
+  // let data = await userService.createNewUser(email, password, firstname, lastname);
+  let data = await userService.createNewUser(req.body);
   // console.log('>>>check req', req.body);
-  res.status(200).send('Success');
-  // .redirect('http://localhost:3000/user')
+  return res.status(200).json({
+    EM: data.EM,
+    EC: data.EC,
+    DT: data.DT,
+  });
 };
 
 // Find a single Tutorial by Id
@@ -64,6 +69,85 @@ const getUserAccount = async (req, res) => {
   });
 };
 
+const userRead = async (req, res) => {
+  try {
+    if (req.query.page && req.query.limit) {
+      let page = req.query.page;
+      let limit = req.query.limit;
+
+      let data = await userService.getUserWithPagination(+page, +limit);
+      // console.log(page, limit);
+      return res.status(200).json({
+        EM: data.EM, // error message
+        EC: data.EC, // error code
+        DT: data.DT, // data
+      });
+    } else {
+      let data = await userService.getAllUser();
+      return res.status(200).json({
+        EM: data.EM, // error message
+        EC: data.EC, // error code
+        DT: data.DT, // data
+      });
+    };
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server', // error message
+      EC: '-1', // error code
+      DT: '', // data
+    });
+  }
+};
+const userCreate = async (req, res) => {
+  try {
+    let data = await userService.createNewUser(req.body);
+    // console.log('>>>check req', req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server',
+      EC: '-1',
+      DT: '',
+    });
+  }
+};
+const userUpdate = (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server',
+      EC: '-1',
+      DT: '',
+    });
+  }
+};
+const userDelete = async (req, res) => {
+  try {
+    // console.log('Backend response:', req.body.id);
+    let data = await userService.deleteUser(req.body.id);
+    // console.log(data);
+    return res.status(200).json({
+      EM: data.EM, // error message
+      EC: data.EC, // error code
+      DT: data.DT, // data
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server',
+      EC: '-1',
+      DT: '',
+    });
+  }
+};
+
 
 // // Update a Tutorial identified by the id in the request
 // exports.getUpdate = async (req, res) => {
@@ -101,4 +185,8 @@ module.exports = {
   userById,
   getAllUser,
   getUserAccount,
+  userRead,
+  userCreate,
+  userDelete,
+  userUpdate,
 };

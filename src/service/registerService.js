@@ -17,7 +17,7 @@ const checkEmailExist = async (userEmail) => {
   });
   if (user) {
     return true;
-  };
+  }
   return false;
 };
 
@@ -45,8 +45,7 @@ const registerNewUser = async (rawUserData) => {
       enc_password: hashPass,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
-    },
-    );
+    });
 
     const userId = newUser.id;
 
@@ -73,6 +72,7 @@ const registerNewUser = async (rawUserData) => {
 
 module.exports = {
   registerNewUser,
+  checkEmailExist,
+  hashUserPassword,
 };
 // export default handleRegister;
-

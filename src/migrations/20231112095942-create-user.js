@@ -17,14 +17,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255),
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
     });
     // user_profile
     await queryInterface.createTable('user_profile', {
@@ -51,15 +43,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       groupId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        references: {
+          model: 'Group',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
     });
     // role
@@ -77,14 +68,6 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
     });
     // Group
     await queryInterface.createTable('Group', {
@@ -101,14 +84,6 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
     });
     // Group_Role
     await queryInterface.createTable('Group_Role', {
@@ -120,18 +95,24 @@ module.exports = {
       },
 
       groupId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
+        references: {
+          model: 'Group',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       roleId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        references: {
+          model: 'Role',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
     });
   },

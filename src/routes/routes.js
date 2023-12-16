@@ -2,11 +2,12 @@
 /**
  * config all api routes
  */
-import {userById, getAllUser, getUserAccount} from '../controllers/UserController.js';
+import {userById, getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate} from '../controllers/UserController.js';
 import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
 import {handleRegister, handleLogin, handleLogout} from '../controllers/loginRegisterController.js';
 import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js';
 import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc} from '../controllers/RolesController.js';
+import {groupReadFunc} from '../controllers/GroupControoler.js';
 import express from 'express';
 const router = express.Router();
 
@@ -15,10 +16,9 @@ const initWebRoutes = (app) => {
 
 
   router.all('*', checkUserJWT, checkUserPermission);
-  // Create a new Tutorial
   // router.post('/', createNewUser);
 
-  //
+  // login regist
   router.post('/register', handleRegister); // register
   router.post('/login', handleLogin); // login
   router.post('/logout', handleLogout); // logout
@@ -33,11 +33,16 @@ const initWebRoutes = (app) => {
   // get account state and information for authorization
   router.get('/account', getUserAccount);
 
-  // Retrieve all All UserData
+  // users
   router.get('/users', getAllUser);
-
-  // Retrieve a single Tutorial with id
+  router.post('/users/create', userCreate);
+  router.get('/users/read', userRead);
+  router.put('/users/update', userUpdate);
+  router.delete('/users/delete', userDelete);
   router.get('/users/:id', userById);
+
+  // group
+  router.get('/group/read', groupReadFunc);
 
   // Update a Tutorial with id
   // router.put('/:id', tutorials.update);
