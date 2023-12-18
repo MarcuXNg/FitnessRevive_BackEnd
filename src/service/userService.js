@@ -75,19 +75,42 @@ const getUserWithPagination = async (page, limit) => {
       offset: offset,
       limit: limit,
       // sort: '',
-      attributes: ['first_name', 'last_name'],
+      attributes: ['first_name', 'last_name', 'contact_number', 'state', 'city', 'gender', 'country', 'date_of_birth'],
       include: [
         {model: db.User, attributes: ['id', 'email', 'createdAt', 'updatedAt']},
         {model: db.Group, attributes: ['id', 'name', 'description']},
       ], // Include user profiles in the query
+      order: [['id', 'DESC']],
       // raw: true,
+    });
+
+    let rowsObject = rows.map((row) => {
+      const userProperties = {
+        email: row.User.email,
+        groupId: row.Group.id,
+        groupName: row.Group.name,
+        groupDescription: row.Group.description,
+        // Add other user attributes if needed
+      };
+      // Flatten the User object
+      return {
+        ...userProperties,
+        city: row.city,
+        first_name: row.first_name,
+        gender: row.gender,
+        last_name: row.last_name,
+        contact_number: row.contact_number,
+        state: row.state,
+        country: row.country,
+        date_of_birth: row.date_of_birth,
+      };
     });
 
     let totalPages = Math.ceil(count/limit);
     let data = {
       totalRows: count,
       totalPages: totalPages,
-      users: rows,
+      users: rowsObject,
     };
 
     return {

@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         onDelete: 'CASCADE',
       });
-      UserProfile.belongsTo(models.Group);
+      UserProfile.belongsTo(models.Group, {
+        foreignKey: 'groupId',
+        onDelete: 'CASCADE',
+      });
     }
   }
 
