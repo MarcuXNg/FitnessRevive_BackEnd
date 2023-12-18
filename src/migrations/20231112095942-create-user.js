@@ -18,6 +18,22 @@ module.exports = {
         type: Sequelize.STRING(255),
       },
     });
+    // Group
+    await queryInterface.createTable('Group', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+    
+      name: {
+        type: Sequelize.STRING,
+      },
+        description: {
+        type: Sequelize.STRING,
+      },
+      }, {timestamps: false});
     // user_profile
     await queryInterface.createTable('user_profile', {
       id: {
@@ -52,6 +68,24 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      contact_number: {
+        type: Sequelize.INTEGER,
+      },
+      country: {
+        type: Sequelize.STRING,
+      },
+      state: {
+        type: Sequelize.STRING,
+      },
+      city: {
+        type: Sequelize.STRING,
+      },
+      gender: {
+        type: Sequelize.STRING,
+      },
+      date_of_birth: {
+        type: Sequelize.DATE,
+      },
     });
     // role
     await queryInterface.createTable('role', {
@@ -63,22 +97,6 @@ module.exports = {
       },
 
       url: {
-        type: Sequelize.STRING,
-      },
-      description: {
-        type: Sequelize.STRING,
-      },
-    });
-    // Group
-    await queryInterface.createTable('Group', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-
-      name: {
         type: Sequelize.STRING,
       },
       description: {
