@@ -5,7 +5,6 @@ const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Meals extends Model {
     static associate(models) {
-        Meals.hasMany(models.Daily_log);
     }
   }
 

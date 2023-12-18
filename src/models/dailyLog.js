@@ -3,24 +3,27 @@
 'use strict';
 const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Daily_log extends Model {
+  class DailyLog extends Model {
     static associate(models) {
-        Daily_log.belongsTo(models.Body_vital_log, {
-        foreignKey: 'body_vital_logId',
+      DailyLog.belongsTo(models.BodyVitalLog, {
+        foreignKey: 'bodyVitalLogId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
-        Daily_log.belongsTo(models.Meals, {
+      DailyLog.hasMany(models.Meals, {
         foreignKey: 'mealsId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
-        Daily_log.belongsTo(models.Exercises, {
+      DailyLog.hasMany(models.Exercises, {
         foreignKey: 'exercisesId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
     }
   }
 
-  Daily_log.init(
+  DailyLog.init(
       {
         log_date: DataTypes.DATE,
         calories_comsumed_per_day: DataTypes.INTEGER,
@@ -29,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
         sequelize,
-        modelName: 'Daily_log',
+        modelName: 'DailyLog',
         tableName: 'daily_log',
       },
   );
 
-  return Daily_log;
+  return DailyLog;
 };

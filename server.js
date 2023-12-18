@@ -5,7 +5,6 @@ import express from 'express';
 import {initWebRoutes} from './src/routes/routes.js';
 import configcors from './src/config/cors.js';
 import cookieParser from 'cookie-parser';
-// import connection from './src/config/connectDB.js';
 
 require('dotenv').config();
 
@@ -22,9 +21,6 @@ app.use(express.urlencoded({extended: true})); /* bodyParser.urlencoded() is dep
 
 // config cookie-parser
 app.use(cookieParser());
-
-// test connection db
-// connection();
 
 // simple route
 app.get('/', (req, res) => {

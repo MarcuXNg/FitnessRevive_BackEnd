@@ -87,6 +87,7 @@ const getUserWithPagination = async (page, limit) => {
     let rowsObject = rows.map((row) => {
       const userProperties = {
         email: row.User.email,
+        id: row.User.id,
         groupId: row.Group.id,
         groupName: row.Group.name,
         groupDescription: row.Group.description,

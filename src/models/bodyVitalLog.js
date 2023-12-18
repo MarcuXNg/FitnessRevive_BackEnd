@@ -3,16 +3,17 @@
 'use strict';
 const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Body_vital_log extends Model {
+  class BodyVitalLog extends Model {
     static associate(models) {
-        Body_vital_log.belongsTo(models.UserProfile, {
+      BodyVitalLog.belongsTo(models.UserProfile, {
         foreignKey: 'user_profileId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
     }
   }
 
-  Body_vital_log.init(
+  BodyVitalLog.init(
       {
         height: DataTypes.INTEGER,
         weight: DataTypes.INTEGER,
@@ -22,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
         sequelize,
-        modelName: 'Body_vital_log',
+        modelName: 'BodyVitalLog',
         tableName: 'body_vital_log',
       },
   );
 
-  return Body_vital_log;
+  return BodyVitalLog;
 };

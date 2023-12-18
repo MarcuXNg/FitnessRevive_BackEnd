@@ -8,10 +8,12 @@ module.exports = (sequelize, DataTypes) => {
       UserProfile.belongsTo(models.User, {
         foreignKey: 'userId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
       UserProfile.belongsTo(models.Group, {
         foreignKey: 'groupId',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
     }
   }

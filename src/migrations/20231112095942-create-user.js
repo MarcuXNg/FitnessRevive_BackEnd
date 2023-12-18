@@ -17,6 +17,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(255),
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
     // Group
     await queryInterface.createTable('Group', {
@@ -26,14 +34,22 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-    
+
       name: {
         type: Sequelize.STRING,
       },
-        description: {
+      description: {
         type: Sequelize.STRING,
       },
-      }, {timestamps: false});
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
     // user_profile
     await queryInterface.createTable('user_profile', {
       id: {
@@ -86,6 +102,14 @@ module.exports = {
       date_of_birth: {
         type: Sequelize.DATE,
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
     // role
     await queryInterface.createTable('role', {
@@ -101,6 +125,14 @@ module.exports = {
       },
       description: {
         type: Sequelize.STRING,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
     // Group_Role
@@ -126,11 +158,19 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Role',
+          model: 'role',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },
