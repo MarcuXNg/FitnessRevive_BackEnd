@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         onDelete: 'CASCADE',
       });
-      UserProfile.belongsTo(models.Group);
+      UserProfile.belongsTo(models.Group, {
+        foreignKey: 'groupId',
+        onDelete: 'CASCADE',
+      });
     }
   }
 
@@ -17,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       {
         first_name: DataTypes.STRING,
         last_name: DataTypes.STRING,
-        groupId: DataTypes.INTEGER,
+        contact_number: DataTypes.INTEGER,
+        country: DataTypes.STRING,
+        state: DataTypes.STRING,
+        city: DataTypes.STRING,
+        gender: DataTypes.STRING,
+        date_of_birth: DataTypes.DATE,
       },
       {
         sequelize,
