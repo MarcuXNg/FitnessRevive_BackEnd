@@ -66,47 +66,49 @@ module.exports = {
             description: 'create users',
           },
         ], {});
+    
+    await queryInterface.bulkInsert('Group_Role',
+        [
+          {
+            groupId: 4,
+            roleId: 1,
+          },
+          {
+            groupId: 4,
+            roleId: 2,
+          },
+          {
+            groupId: 1,
+            roleId: 1,
+          },
+          {
+            groupId: 1,
+            roleId: 2,
+          },
+          {
+            groupId: 1,
+            roleId: 4,
+          },
+          {
+            groupId: 1,
+            roleId: 6,
+          },
+          {
+            groupId: 1,
+            roleId: 7,
+          },
+          {
+            groupId: 1,
+            roleId: 8,
+          },
+          {
+            groupId: 1,
+            roleId: 9,
+          },
+        ], {});
   },
 
-  // await queryInterface.bulkInsert('Group_Role',
-    //     [
-    //       {
-    //         groupId: 4,
-    //         roleId: 1,
-    //       },
-    //       {
-    //         groupId: 4,
-    //         roleId: 2,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 1,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 2,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 4,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 6,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 7,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 8,
-    //       },
-    //       {
-    //         groupId: 1,
-    //         roleId: 9,
-    //       },
-    //     ], {});
+    
 
   down: async (queryInterface, Sequelize) => {
     /**
