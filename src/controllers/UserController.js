@@ -24,19 +24,6 @@ const createNewUser = async (req, res) => {
   });
 };
 
-// Find a single Tutorial by Id
-const userById = async (req, res) => {
-  const id = req.params.id;
-  const user = await userService.userById(id);
-  let userData = {};
-  if (!user) {
-    return res.status(404).send('404 NOT FOUND');
-  }
-  userData = user;
-  // console.log(req.params.id);
-  return res.send(userData);
-};
-
 // get All User
 const getAllUser = async (req, res) => {
   try {
@@ -117,8 +104,15 @@ const userCreate = async (req, res) => {
     });
   }
 };
-const userUpdate = (req, res) => {
+const userUpdate = async (req, res) => {
   try {
+    // console.log('>>>check req', req.body);
+    let data = await userService.updateUser(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -182,7 +176,6 @@ const userDelete = async (req, res) => {
 
 module.exports = {
   createNewUser,
-  userById,
   getAllUser,
   getUserAccount,
   userRead,

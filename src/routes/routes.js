@@ -2,10 +2,10 @@
 /**
  * config all api routes
  */
-import {userById, getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate} from '../controllers/UserController.js';
+import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate} from '../controllers/UserController.js';
 import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
 import {handleRegister, handleLogin, handleLogout} from '../controllers/loginRegisterController.js';
-import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js';
+import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; // JWT & user Permission
 import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc} from '../controllers/RolesController.js';
 import {groupReadFunc} from '../controllers/GroupControoler.js';
 import express from 'express';
@@ -14,24 +14,23 @@ const router = express.Router();
 const initWebRoutes = (app) => {
   // path handler
 
-
+  // authorize
   router.all('*', checkUserJWT, checkUserPermission);
-  // router.post('/', createNewUser);
 
-  // login regist
+  // get account state and information for authorization
+  router.get('/account', getUserAccount);
+
+  // login register
   router.post('/register', handleRegister); // register
   router.post('/login', handleLogin); // login
   router.post('/logout', handleLogout); // logout
 
   // admin routes
   // roles routes
-  // router.get('/admin/roles/read', RolesReadFunc);
+  router.get('/admin/roles/read', RolesReadFunc);
   router.post('/admin/roles/create', RolesCreateFunc);
-  // router.put('/admin/roles/update', RolesUpdateFunc);
-  // router.delete('/admin/roles/delete', RolesDeleteFunc);
-
-  // get account state and information for authorization
-  router.get('/account', getUserAccount);
+  router.put('/admin/roles/update', RolesUpdateFunc);
+  router.delete('/admin/roles/delete', RolesDeleteFunc);
 
   // users
   router.get('/users', getAllUser);
@@ -39,7 +38,6 @@ const initWebRoutes = (app) => {
   router.get('/users/read', userRead);
   router.put('/users/update', userUpdate);
   router.delete('/users/delete', userDelete);
-  router.get('/users/:id', userById);
 
   // group
   router.get('/group/read', groupReadFunc);

@@ -173,6 +173,160 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+    // body_vital_log
+    await queryInterface.createTable('body_vitals_log', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+
+      user_profile_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'user_profile',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      height: {
+        type: Sequelize.INTEGER,
+      },
+      weight: {
+        type: Sequelize.INTEGER,
+      },
+      bmi: {
+        type: Sequelize.FLOAT,
+      },
+      bmr: {
+        type: Sequelize.FLOAT,
+      },
+      activity_level: {
+        type: Sequelize.STRING,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+    // meals
+    await queryInterface.createTable('meals', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      meal_type: {
+        type: Sequelize.STRING,
+      },
+      meal_name: {
+        type: Sequelize.STRING,
+      },
+      calories: {
+        type: Sequelize.INTEGER,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+    // exercises
+    await queryInterface.createTable('exercises', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      exercise_type: {
+        type: Sequelize.STRING,
+      },
+      exercise_name: {
+        type: Sequelize.STRING,
+      },
+      calories: {
+        type: Sequelize.INTEGER,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+    // daily_log
+    await queryInterface.createTable('daily_log', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      meals_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'meals',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      exercises_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'exercises',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      body_vitals_log_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'body_vitals_log',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      log_date: {
+        type: Sequelize.DATE,
+      },
+      calories_consumed_per_day: {
+        type: Sequelize.INTEGER,
+      },
+      calories_burnt_per_day: {
+        type: Sequelize.INTEGER,
+      },
+      calories_goal: {
+        type: Sequelize.INTEGER,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('user_account');

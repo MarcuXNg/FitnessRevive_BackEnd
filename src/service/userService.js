@@ -27,13 +27,16 @@ const createNewUser = async (data) => {
     });
     const userId = newUser.id;
     await db.UserProfile.create({
-      first_name: data.firstname,
-      last_name: data.lastname,
+      first_name: data.first_name,
+      last_name: data.last_name,
       groupId: data.group,
       userId: userId,
       city: data.city,
       state: data.state,
       gender: data.gender,
+      country: data.country,
+      contact_number: data.contact_number,
+      date_of_birth: data.date_of_birth,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
     });
@@ -43,25 +46,6 @@ const createNewUser = async (data) => {
       EC: 0,
       DT: [],
     };
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const userById = async (id) => {
-  try {
-    let user = {};
-
-    user = await db.User.findOne({
-      where: {id: id},
-      include: db.UserProfile,
-    });
-    if (user === null) {
-      console.log('Not found!');
-    }
-    // console.log(user, id);
-    // const userdata = user.get({plain: true}); // user as object
-    return user;
   } catch (error) {
     console.log(error);
   }
@@ -166,25 +150,60 @@ const getAllUser = async () => {
   }
 };
 
-const updateUserByID = async (id, email, firstname, lastname) => {
+const updateUser = async (data) => {
   try {
-    // Find the user by id and include the associated profile
-    const user = await db.User.findByPk(userId, {
-      include: db.UserProfile,
+    console.log('check data', data);
+
+    // Find the user's profile by user's ID
+    const user = await db.UserProfile.findOne({
+      where: {
+        userId: data.id,
+      },
     });
 
+    // console.log(user);
+
+    if (!data.groupId) {
+      return {
+        EM: 'empty groupId',
+        EC: 1,
+        DT: 'group',
+      };
+    }
     if (user) {
       await user.update(
-          {email: email, first_name: firstname, last_name: lastname},
           {
-            where: {
-              id: id,
-            },
+            first_name: data.first_name,
+            last_name: data.last_name,
+            groupId: data.groupId,
+            gender: data.gender,
+            country: data.country,
+            city: data.city,
+            state: data.state,
+            contact_number: data.contact_number,
+            date_of_birth: data.date_of_birth,
           },
       );
+      return {
+        EM: 'Update successfully',
+        EC: 0,
+        DT: '',
+      };
     } else {
+      return {
+        EM: 'Update failed',
+        EC: 2,
+        DT: '',
+      };
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrong with the service',
+      EC: 1,
+      DT: [],
+    };
+  }
 };
 
 // deleteUser
@@ -239,7 +258,6 @@ module.exports = {
   createNewUser,
   getAllUser,
   deleteUser,
-  userById,
-  updateUserByID,
+  updateUser,
   getUserWithPagination,
 };
