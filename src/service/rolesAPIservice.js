@@ -77,8 +77,70 @@ const deleteRole = async (id) => {
   }
 };
 
+const getRolesByGroup = async (id) => {
+  try {
+    if (!id) {
+      return {
+        EM: 'Roles not found',
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    let roles = await db.Group.findOne({
+      where: {id: id},
+      attributes: ['id', 'name', 'description'],
+      include: {
+        model: db.Role,
+        attributes: ['id', 'url', 'description'],
+        through: {attributes: []}, // ko lấy bảng đính kèm
+      },
+    });
+
+    if (roles) {
+      return {
+        EM: 'Get Roles by group successfully',
+        EC: 0,
+        DT: roles,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrongs with the services',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
+const assignRoleToGroup = async (data) => {
+  try {
+    await db.GroupRole.destroy({
+      where: {
+        groupId: +data.groupId,
+      },
+    });
+    await db.GroupRole.bulkCreate(data.groupRoles);
+    return {
+      EM: 'Assign Roles to group successfully',
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrongs with the services',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 module.exports = {
   createNewRoles,
   getAllRoles,
   deleteRole,
+  getRolesByGroup,
+  assignRoleToGroup,
 };

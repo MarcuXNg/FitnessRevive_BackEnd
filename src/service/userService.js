@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 import db from '../models/index.js';
 import {checkEmailExist, hashUserPassword} from './registerService.js';
+import {Op} from 'sequelize';
 
 const createNewUser = async (data) => {
   const currentTimestamp = new Date(); // Get the current timestamp
@@ -241,6 +242,77 @@ const deleteUser = async (id) => {
   }
 };
 
+const countUser = async () => {
+  try {
+    let userCount = await db.User.count();
+    return {
+      EM: `Count ${userCount} user(s)`,
+      EC: 0,
+      DT: userCount,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrong with service',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
+const countUserPerWeek = async () => {
+  try {
+    const currentDate = new Date();
+    const startOfThisWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay());
+    const endOfThisWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 6, 23, 59, 59, 999);
+
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+    const endOfLastWeek = new Date(endOfThisWeek);
+    endOfLastWeek.setDate(endOfThisWeek.getDate() - 7);
+
+    const usersThisWeek = await db.User.count({
+      where: {
+        createdAt: {
+          [Op.between]: [startOfThisWeek, endOfThisWeek],
+        },
+      },
+    });
+
+    const usersLastWeek = await db.User.count({
+      where: {
+        createdAt: {
+          [Op.between]: [startOfLastWeek, endOfLastWeek],
+        },
+      },
+    });
+    // console.log(startOfLastWeek, startOfThisWeek, endOfLastWeek, endOfThisWeek);
+    // console.log(`Users this week: ${usersThisWeek}`);
+    // console.log(`Users last week: ${usersLastWeek}`);
+    const calculatePercentageChange = (oldValue, newValue) => {
+      if (oldValue === 0) {
+        return newValue === 0 ? 0 : 100; // Handle division by zero
+      }
+
+      return ((newValue - oldValue) / oldValue) * 100;
+    };
+    const percentageChange = calculatePercentageChange(usersLastWeek, usersThisWeek);
+    // console.log(percentageChange);
+    return {
+      EM: `${percentageChange}% increasing in user(s) from lastweek`,
+      EC: 0,
+      DT: percentageChange,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: 'Something wrong with service',
+      EC: 1,
+      DT: [],
+    };
+  }
+};
+
 // Tutorial.removeAll = (result) => {
 //   sql.query('DELETE FROM tutorials', (err, res) => {
 //     if (err) {
@@ -260,4 +332,6 @@ module.exports = {
   deleteUser,
   updateUser,
   getUserWithPagination,
+  countUser,
+  countUserPerWeek,
 };

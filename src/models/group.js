@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       Group.hasMany(models.UserProfile);
-      Group.belongsToMany(models.Role, {through: 'GroupRole'});
+      Group.belongsToMany(models.Role, {through: 'GroupRole', foreignKey: 'groupId'});
     }
   };
   // Object relational mapping

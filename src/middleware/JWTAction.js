@@ -6,7 +6,7 @@ const nonSecurePaths = ['/register', '/login', '/logout'];
 
 const createJWT = (payload) => {
   const key = process.env.JWT_SECRET;
-  let token = null;
+  let token = null; // token default = null
 
   try {
     token = jwt.sign(payload, key, {
@@ -96,7 +96,7 @@ const checkUserPermission = (req, res, next) => {
       });
     }
     // hàm some trả ra true or false
-    let canAccess = roles.some((item) => item.url === currentUrl);
+    let canAccess = roles.some((item) => item.url === currentUrl || currentUrl.includes(item.url));
     if (canAccess === true) {
       next();
     } else {

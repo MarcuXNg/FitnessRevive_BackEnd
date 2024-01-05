@@ -142,6 +142,42 @@ const userDelete = async (req, res) => {
   }
 };
 
+const userCount = async (req, res) => {
+  try {
+    const data = await userService.countUser();
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC, // error code
+      DT: data.DT, // data
+    });
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({
+      EM: 'error from server', // error message
+      EC: '-1', // error code
+      DT: '', // data
+    });
+  }
+};
+
+const userCountPerWeek = async (req, res) => {
+  try {
+    const data = await userService.countUserPerWeek();
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC, // error code
+      DT: data.DT, // data
+    });
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({
+      EM: 'error from server', // error message
+      EC: '-1', // error code
+      DT: '', // date
+    });
+  }
+};
+
 
 // // Update a Tutorial identified by the id in the request
 // exports.getUpdate = async (req, res) => {
@@ -182,4 +218,6 @@ module.exports = {
   userCreate,
   userDelete,
   userUpdate,
+  userCount,
+  userCountPerWeek,
 };

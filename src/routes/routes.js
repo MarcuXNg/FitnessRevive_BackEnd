@@ -2,11 +2,11 @@
 /**
  * config all api routes
  */
-import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate} from '../controllers/UserController.js';
+import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate, userCount, userCountPerWeek} from '../controllers/UserController.js';
 import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
 import {handleRegister, handleLogin, handleLogout} from '../controllers/loginRegisterController.js';
 import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; // JWT & user Permission
-import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc} from '../controllers/RolesController.js';
+import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc, RolesByGroup, AssignRoleToGroup} from '../controllers/RolesController.js';
 import {groupReadFunc} from '../controllers/GroupControoler.js';
 import express from 'express';
 const router = express.Router();
@@ -31,6 +31,8 @@ const initWebRoutes = (app) => {
   router.post('/admin/roles/create', RolesCreateFunc);
   router.put('/admin/roles/update', RolesUpdateFunc);
   router.delete('/admin/roles/delete', RolesDeleteFunc);
+  router.get('/admin/roles/by-group/:groupId', RolesByGroup);
+  router.post('/admin/roles/assign-to-group', AssignRoleToGroup);
 
   // users
   router.get('/users', getAllUser);
@@ -38,6 +40,8 @@ const initWebRoutes = (app) => {
   router.get('/users/read', userRead);
   router.put('/users/update', userUpdate);
   router.delete('/users/delete', userDelete);
+  router.get('/users/count', userCount);
+  router.get('/users/count-per-week', userCountPerWeek);
 
   // group
   router.get('/group/read', groupReadFunc);
