@@ -1,29 +1,24 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable valid-jsdoc */
 'use strict';
-const {
-  Model,
-} = require('sequelize');
+const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class GroupRole extends Model {
+  class Permission extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-    }
   };
   // Object relational mapping
-  GroupRole.init({
-    groupId: DataTypes.INTEGER,
+  Permission.init({
     roleId: DataTypes.INTEGER,
+    RolePermissionId: DataTypes.INTEGER,
   }, {
     sequelize,
-    modelName: 'GroupRole',
-    tableName: 'Group_Role', // Explicitly set the table name
+    modelName: 'Permission',
+    tableName: 'permission', // Explicitly set the table name
   });
 
-  return GroupRole;
+  return Permission;
 };

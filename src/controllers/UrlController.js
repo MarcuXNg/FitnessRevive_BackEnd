@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import rolesAPIservice from '../service/rolesAPIservice.js';
+import rolesAPIservice from '../service/permissionService.js';
 const RolesCreateFunc = async (req, res) => {
   try {
     // validate

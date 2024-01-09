@@ -30,7 +30,7 @@ const createNewUser = async (data) => {
     await db.UserProfile.create({
       first_name: data.first_name,
       last_name: data.last_name,
-      groupId: data.group,
+      roleId: data.role,
       userId: userId,
       city: data.city,
       state: data.state,
@@ -63,7 +63,7 @@ const getUserWithPagination = async (page, limit) => {
       attributes: ['first_name', 'last_name', 'contact_number', 'state', 'city', 'gender', 'country', 'date_of_birth'],
       include: [
         {model: db.User, attributes: ['id', 'email', 'createdAt', 'updatedAt']},
-        {model: db.Group, attributes: ['id', 'name', 'description']},
+        {model: db.Role, attributes: ['id', 'name', 'description']},
       ], // Include user profiles in the query
       order: [['id', 'DESC']],
       // raw: true,
@@ -73,9 +73,9 @@ const getUserWithPagination = async (page, limit) => {
       const userProperties = {
         email: row.User.email,
         id: row.User.id,
-        groupId: row.Group.id,
-        groupName: row.Group.name,
-        groupDescription: row.Group.description,
+        roleId: row.Role.id,
+        roleName: row.Role.name,
+        roleDescription: row.Role.description,
         // Add other user attributes if needed
       };
       // Flatten the User object
@@ -153,7 +153,7 @@ const getAllUser = async () => {
 
 const updateUser = async (data) => {
   try {
-    console.log('check data', data);
+    // console.log('check data', data);
 
     // Find the user's profile by user's ID
     const user = await db.UserProfile.findOne({
@@ -164,7 +164,7 @@ const updateUser = async (data) => {
 
     // console.log(user);
 
-    if (!data.groupId) {
+    if (!data.roleId) {
       return {
         EM: 'empty groupId',
         EC: 1,

@@ -2,19 +2,19 @@
 /**
  * config all api routes
  */
-import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate, userCount, userCountPerWeek} from '../controllers/UserController.js';
-import {deleteUser, getUpdateUserPage} from '../controllers/AdminController.js';
-import {handleRegister, handleLogin, handleLogout} from '../controllers/loginRegisterController.js';
+import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate, userCount, userCountPerWeek} from '../controllers/UserController.js'; // User
+import {handleRegister, handleLogin, handleLogout} from '../controllers/LoginRegisterController.js'; // login, logout, register
 import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; // JWT & user Permission
-import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc, RolesByGroup, AssignRoleToGroup} from '../controllers/RolesController.js';
-import {groupReadFunc} from '../controllers/GroupControoler.js';
+import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc, RolesByGroup, AssignRoleToGroup} from '../controllers/UrlController.js'; // Roles
+import {handleRefreshToken} from '../controllers/AuthController.js';
+import {groupReadFunc} from '../controllers/RoleController.js'; // Group
 import express from 'express';
 const router = express.Router();
 
 const initWebRoutes = (app) => {
   // path handler
 
-  // authorize
+  // authorization & authentication
   router.all('*', checkUserJWT, checkUserPermission);
 
   // get account state and information for authorization
@@ -24,9 +24,9 @@ const initWebRoutes = (app) => {
   router.post('/register', handleRegister); // register
   router.post('/login', handleLogin); // login
   router.post('/logout', handleLogout); // logout
+  router.get('/refresh', handleRefreshToken);
 
   // admin routes
-  // roles routes
   router.get('/admin/roles/read', RolesReadFunc);
   router.post('/admin/roles/create', RolesCreateFunc);
   router.put('/admin/roles/update', RolesUpdateFunc);
@@ -45,17 +45,6 @@ const initWebRoutes = (app) => {
 
   // group
   router.get('/group/read', groupReadFunc);
-
-  // Update a Tutorial with id
-  // router.put('/:id', tutorials.update);
-  router.post('users/update/:id', getUpdateUserPage);
-
-  // // Delete a user with id
-  router.delete('/users/:id', deleteUser);
-  // router.post('/delete-user/:id', deleteUser);
-
-  // // Delete all Tutorials
-  // router.delete('/', tutorials.deleteAll);
 
   return app.use('/api/v1/', router);
 };

@@ -3,7 +3,7 @@ import db from '../models/index';
 
 const createNewRoles = async (roles) => {
   try {
-    let currentRoles = await db.Role.findAll({
+    let currentRoles = await db.RolePermission.findAll({
       attributes: ['url', 'description'],
       raw: true, // raw = false để lấy sequelize object, = true để lấy sequelize aray
     });
@@ -18,7 +18,7 @@ const createNewRoles = async (roles) => {
         DT: [],
       };
     }
-    await db.Role.bulkCreate(roles);
+    await db.RolePermission.bulkCreate(roles);
     return {
       EM: `Create ${persists.length} Role Successfully`,
       EC: 0,
@@ -36,7 +36,7 @@ const createNewRoles = async (roles) => {
 
 const getAllRoles = async () => {
   try {
-    let data = await db.Role.findAll({
+    let data = await db.RolePermission.findAll({
       order: [['id', 'DESC']],
     });
     return {
@@ -56,7 +56,7 @@ const getAllRoles = async () => {
 
 const deleteRole = async (id) => {
   try {
-    let role = await db.Role.findOne({
+    let role = await db.RolePermission.findOne({
       where: {id: id},
     });
     if (role) {
@@ -87,11 +87,11 @@ const getRolesByGroup = async (id) => {
       };
     }
 
-    let roles = await db.Group.findOne({
+    let roles = await db.Role.findOne({
       where: {id: id},
       attributes: ['id', 'name', 'description'],
       include: {
-        model: db.Role,
+        model: db.RolePermission,
         attributes: ['id', 'url', 'description'],
         through: {attributes: []}, // ko lấy bảng đính kèm
       },
@@ -116,12 +116,12 @@ const getRolesByGroup = async (id) => {
 
 const assignRoleToGroup = async (data) => {
   try {
-    await db.GroupRole.destroy({
+    await db.Permission.destroy({
       where: {
-        groupId: +data.groupId,
+        roleId: +data.roleId,
       },
     });
-    await db.GroupRole.bulkCreate(data.groupRoles);
+    await db.Permission.bulkCreate(data.Permission);
     return {
       EM: 'Assign Roles to group successfully',
       EC: 0,

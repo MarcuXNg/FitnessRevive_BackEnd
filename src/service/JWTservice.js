@@ -1,12 +1,12 @@
 import db from '../models/index';
 
-const getGroupWithRoles = async (user) => {
+const getRolesWithUrl = async (user) => {
 //   console.log(user.dataValues.UserProfile.dataValues);
-  const roles = await db.Group.findOne({
-    where: {id: user.dataValues.UserProfile.dataValues.groupId},
+  const roles = await db.Role.findOne({
+    where: {id: user.dataValues.UserProfile.dataValues.roleId},
     attributes: ['id', 'name', 'description'],
     include: {
-      model: db.Role,
+      model: db.RolePermission,
       attributes: ['id', 'url', 'description'],
       through: {attributes: []},
     },
@@ -16,5 +16,5 @@ const getGroupWithRoles = async (user) => {
 };
 
 module.exports = {
-  getGroupWithRoles,
+  getRolesWithUrl,
 };

@@ -26,8 +26,39 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    // Group
-    await queryInterface.createTable('Group', {
+    await queryInterface.createTable('JWTs', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'user_account',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      refreshToken: {
+        type: Sequelize.TEXT, // Use TEXT type instead of JSON
+        allowNull: true,
+        defaultValue: null,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+    // role
+    await queryInterface.createTable('Role', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -74,11 +105,11 @@ module.exports = {
       last_name: {
         type: Sequelize.STRING,
       },
-      groupId: {
+      roleId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Group',
+          model: 'Role',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -111,8 +142,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    // role
-    await queryInterface.createTable('role', {
+    // role_permission
+    await queryInterface.createTable('RolePermission', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -135,8 +166,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    // Group_Role
-    await queryInterface.createTable('Group_Role', {
+    // permission
+    await queryInterface.createTable('permission', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -144,21 +175,21 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
 
-      groupId: {
+      roleId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Group',
+          model: 'Role',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      roleId: {
+      RolePermissionId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'role',
+          model: 'RolePermission',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -331,8 +362,8 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('user_account');
     await queryInterface.dropTable('user_profile');
+    await queryInterface.dropTable('role_permission');
     await queryInterface.dropTable('role');
-    await queryInterface.dropTable('Group');
-    await queryInterface.dropTable('Group_Role');
+    await queryInterface.dropTable('permission');
   },
 };

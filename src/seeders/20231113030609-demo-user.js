@@ -38,17 +38,11 @@ module.exports = {
           },
         ], {});
 
-    await queryInterface.bulkInsert('Group',
+    await queryInterface.bulkInsert('Role',
         [
           {
             name: 'Dev',
             description: 'developer',
-            createdAt: currentTimestamp,
-            updatedAt: currentTimestamp,
-          },
-          {
-            name: 'Guest',
-            description: 'view only',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
@@ -71,14 +65,14 @@ module.exports = {
           {
             first_name: 'admin',
             last_name: '',
-            groupId: 1,
+            roleId: 1,
             userId: 1,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
         ], {});
 
-    await queryInterface.bulkInsert('role',
+    await queryInterface.bulkInsert('RolePermission',
         [
           {
             url: '/users',
@@ -134,82 +128,131 @@ module.exports = {
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
+          {
+            url: '/admin/roles/read',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/admin/roles/delete',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/admin/roles/by-group',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/admin/roles/assign-to-group',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
         ], {});
 
-    await queryInterface.bulkInsert('Group_Role',
+    await queryInterface.bulkInsert('permission',
         [
           {
-            groupId: 4,
-            roleId: 1,
-            createdAt: currentTimestamp,
-            updatedAt: currentTimestamp,
-          },
-          {
-            groupId: 4,
-            roleId: 2,
-            createdAt: currentTimestamp,
-            updatedAt: currentTimestamp,
-          },
-          {
-            groupId: 4,
             roleId: 3,
+            RolePermissionId: 1,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 1,
-            createdAt: currentTimestamp,
-            updatedAt: currentTimestamp,
-          },
-          {
-            groupId: 1,
-            roleId: 2,
-            createdAt: currentTimestamp,
-            updatedAt: currentTimestamp,
-          },
-          {
-            groupId: 1,
             roleId: 3,
+            RolePermissionId: 2,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 4,
+            roleId: 3,
+            RolePermissionId: 3,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 5,
+            roleId: 1,
+            RolePermissionId: 1,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 6,
+            roleId: 1,
+            RolePermissionId: 2,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 7,
+            roleId: 1,
+            RolePermissionId: 3,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 8,
+            roleId: 1,
+            RolePermissionId: 4,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            groupId: 1,
-            roleId: 9,
+            roleId: 1,
+            RolePermissionId: 5,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
+          {
+            roleId: 1,
+            RolePermissionId: 6,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 7,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 8,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 9,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 10,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 11,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 12,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 13,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+
         ], {});
   },
 

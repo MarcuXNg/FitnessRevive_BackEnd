@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import groupService from '../service/groupService';
+import groupService from '../service/rolesService';
 
 const groupReadFunc = async (req, res) => {
   try {

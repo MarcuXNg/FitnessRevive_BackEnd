@@ -3,27 +3,31 @@
 'use strict';
 const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Role extends Model {
+  class JWTs extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Role.hasMany(models.UserProfile);
-      Role.belongsToMany(models.RolePermission, {through: 'Permission', foreignKey: 'roleId'});
+      // Define association here
+      JWTs.belongsTo(models.User, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   };
   // Object relational mapping
-  Role.init({
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
+  JWTs.init({
+    refreshToken: DataTypes.TEXT,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
-    modelName: 'Role',
-    tableName: 'Role', // Explicitly set the table name
+    modelName: 'JWTs',
+    tableName: 'JWTs', // Explicitly set the table name
   });
 
-  return Role;
+  return JWTs;
 };

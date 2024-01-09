@@ -3,7 +3,7 @@ import db from '../models/index';
 
 const getGroups = async () => {
   try {
-    let data = await db.Group.findAll({
+    let data = await db.Role.findAll({
       order: [['name', 'DESC']],
     });
     return {

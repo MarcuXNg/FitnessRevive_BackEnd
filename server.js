@@ -2,10 +2,12 @@
 import express from 'express';
 // const bodyParser = require("body-parser"); /* deprecated */
 
-import {initWebRoutes} from './src/routes/routes.js';
-import configcors from './src/config/cors.js';
-import cookieParser from 'cookie-parser';
+import {initWebRoutes} from './src/routes/routes.js'; // import routes
+import configcors from './src/middleware/cors.js'; // import cors
+import cookieParser from 'cookie-parser'; // import cookie-parser
+import errorHandler from './src/handler/errorHandler'; // import error handler
 
+// import env file config
 require('dotenv').config();
 
 const app = express();
@@ -22,11 +24,15 @@ app.use(express.urlencoded({extended: true})); /* bodyParser.urlencoded() is dep
 // config cookie-parser
 app.use(cookieParser());
 
+// error handler
+app.use(errorHandler);
+
 // simple route
 app.get('/', (req, res) => {
   res.json({message: 'Welcome to our Database.'});
 });
 
+// routes
 initWebRoutes(app);
 
 // set port, listen for requests

@@ -34,6 +34,11 @@ npm init @eslint/config
 
 file: config.json in ./src/config/
 
+### create a random secret key for JWT
+
+access node by typing `node`
+`require('crypto').randomBytes(64).toString('hex')`
+
 For instruction, please visit:
 
 > [Build Node.js Rest APIs with Express & MySQL](https://www.bezkoder.com/node-js-rest-api-express-mysql/)
