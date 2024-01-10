@@ -136,10 +136,8 @@ const checkUserJWT = (req, res, next) => {
 
 const checkUserPermission = (req, res, next) => {
   if (nonSecurePaths.includes(req.path) || req.path === '/account') return next();
-
   if (req.user) {
-    // let email = req.user.email;
-    let roles = req.user.rolesWithPermission.URLs;
+    let roles = req.user.rolesWithPermission.RolePermissions;
     let currentUrl = req.path;
     if (!roles || roles.length === 0) {
       return res.status(403).json({
