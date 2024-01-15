@@ -5,9 +5,9 @@
 import {getAllUser, getUserAccount, userCreate, userDelete, userRead, userUpdate, userCount, userCountPerWeek} from '../controllers/UserController.js'; // User
 import {handleRegister, handleLogin, handleLogout} from '../controllers/LoginRegisterController.js'; // login, logout, register
 import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; // JWT & user Permission
-import {RolesCreateFunc, RolesReadFunc, RolesDeleteFunc, RolesUpdateFunc, RolesByGroup, AssignRoleToGroup} from '../controllers/UrlController.js'; // Roles
-import {handleRefreshToken} from '../controllers/AuthController.js';
-import {groupReadFunc} from '../controllers/RoleController.js'; // Group
+import {PermissionCreateFunc, PermissionsReadFunc, PermisionDeleteFunc, PermissionUpdateFunc, PermissionsByRole, AssignPermissionToRole} from '../controllers/Permissioncontroller.js'; // Permissions
+import {handleRefreshToken} from '../controllers/AuthController.js'; // auth handle refresh
+import {roleReadFunc} from '../controllers/RoleController.js'; // Role
 import express from 'express';
 const router = express.Router();
 
@@ -27,12 +27,13 @@ const initWebRoutes = (app) => {
   router.get('/refresh', handleRefreshToken);
 
   // admin routes
-  router.get('/admin/roles/read', RolesReadFunc);
-  router.post('/admin/roles/create', RolesCreateFunc);
-  router.put('/admin/roles/update', RolesUpdateFunc);
-  router.delete('/admin/roles/delete', RolesDeleteFunc);
-  router.get('/admin/roles/by-group/:groupId', RolesByGroup);
-  router.post('/admin/roles/assign-to-group', AssignRoleToGroup);
+  router.get('/roles/read', roleReadFunc);
+  router.get('/admin/permissions/read', PermissionsReadFunc);
+  router.post('/admin/permissions/create', PermissionCreateFunc);
+  router.put('/admin/permissions/update', PermissionUpdateFunc);
+  router.delete('/admin/permissions/delete', PermisionDeleteFunc);
+  router.get('/admin/permissions/by-role/:roleId', PermissionsByRole);
+  router.post('/admin/permissions/assign-to-role', AssignPermissionToRole);
 
   // users
   router.get('/users', getAllUser);
@@ -43,8 +44,6 @@ const initWebRoutes = (app) => {
   router.get('/users/count', userCount);
   router.get('/users/count-per-week', userCountPerWeek);
 
-  // group
-  router.get('/group/read', groupReadFunc);
 
   return app.use('/api/v1/', router);
 };

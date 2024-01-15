@@ -1,9 +1,9 @@
 /* eslint-disable prefer-const */
-import groupService from '../service/rolesService';
+import rolesService from '../service/rolesService';
 
-const groupReadFunc = async (req, res) => {
+const roleReadFunc = async (req, res) => {
   try {
-    let data = await groupService.getGroups();
+    let data = await rolesService.getRoles();
     // console.log(data);
     return res.status(200).json({
       EM: data.EM, // error message
@@ -20,5 +20,5 @@ const groupReadFunc = async (req, res) => {
   }
 };
 module.exports = {
-  groupReadFunc,
+  roleReadFunc,
 };

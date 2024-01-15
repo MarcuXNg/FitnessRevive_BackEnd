@@ -131,7 +131,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       date_of_birth: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       createdAt: {
         allowNull: false,

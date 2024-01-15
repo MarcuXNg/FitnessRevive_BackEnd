@@ -32,16 +32,25 @@ const getAllUser = async (req, res) => {
 };
 
 const getUserAccount = async (req, res) => {
-  return res.status(200).json({
-    EM: 'ok',
-    EC: 0, // error code
-    DT: {
-      access_token: req.token,
-      rolesWithPermission: req.user.rolesWithPermission,
-      email: req.user.email,
-      username: req.user.username,
-    },
-  });
+  try {
+    return res.status(200).json({
+      EM: 'ok',
+      EC: 0, // error code
+      DT: {
+        access_token: req.token,
+        rolesWithPermission: req.user.rolesWithPermission,
+        email: req.user.email,
+        username: req.user.username,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server',
+      EC: '-1',
+      DT: '',
+    });
+  }
 };
 
 const userRead = async (req, res) => {

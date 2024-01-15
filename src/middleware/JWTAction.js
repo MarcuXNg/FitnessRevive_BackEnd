@@ -42,7 +42,6 @@ const verifyToken = (token) => {
     if (error.name === 'TokenExpiredError') {
       // Token is expired
       console.log('Token expired:', error.expiredAt);
-      return null;
     } else {
       // Other JWT verification errors
       console.log('Error verifying token:', error.message);
@@ -63,7 +62,6 @@ const verifyRefreshToken = (token) => {
     if (error.name === 'TokenExpiredError') {
       // Token is expired
       console.log('Token expired:', error.expiredAt);
-      return null;
     } else {
       // Other JWT verification errors
       console.log('Error verifying token:', error.message);
@@ -96,6 +94,7 @@ const checkUserJWT = (req, res, next) => {
   if (nonSecurePaths.includes(req.path)) return next(); // If the requested path is in nonSecurePaths, proceed to the next middleware.
 
   let tokenFromHeader = extractToken(req); // Extract the JWT token from the request headers.
+  // console.log('token', tokenFromHeader);
 
   if (tokenFromHeader) {
     let token = tokenFromHeader;
@@ -104,25 +103,26 @@ const checkUserJWT = (req, res, next) => {
       // check nếu token hợp lệ
       decoded = verifyToken(token);
       // If the token is valid, set user data in the request object and proceed to the next middleware.
+      // console.log(decoded);
       if (decoded) {
       // gán data user vô decoded
         req.user = decoded;
         req.token = token;
         return next(); // pass control immediately to thes next middleware function in the stack, and no further code in the current middleware is executed after that point.
       } else {
-        return res.status(401).json({
+        return res.status(403).json({
           EC: -1,
           DT: '',
-          EM: 'Not authenticated user hi hi',
+          EM: 'Forbidden.',
         });
       }
     // console.log('my jwt', cookies.jwt);
     } catch (error) {
       // console.log(error);
-      return res.status(401).json({
+      return res.status(403).json({
         EC: -1,
         DT: '',
-        EM: 'Not authenticated user',
+        EM: 'Forbidden.',
       });
     }
   } else {

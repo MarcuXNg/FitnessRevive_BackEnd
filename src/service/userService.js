@@ -124,20 +124,21 @@ const getAllUser = async () => {
           model: db.User,
           attributes: ['id', 'email', 'createdAt', 'updatedAt'],
         },
-        {model: db.Group, attributes: ['id', 'name', 'description']},
+        {model: db.Role, attributes: ['id', 'name', 'description']},
       ], // Include user profiles in the query
+      order: [['id', 'DESC']],
       // raw: true,
     });
     if (userAccounts) {
       return {
-        EM: 'get data success',
+        EM: 'get data successfully',
         EC: 0,
         DT: userAccounts,
       };
     } else {
       return {
-        EM: 'get data success',
-        EC: 0,
+        EM: 'get data failed',
+        EC: -1,
         DT: [],
       };
     }
@@ -176,7 +177,7 @@ const updateUser = async (data) => {
           {
             first_name: data.first_name,
             last_name: data.last_name,
-            groupId: data.groupId,
+            roleId: data.role,
             gender: data.gender,
             country: data.country,
             city: data.city,

@@ -58,7 +58,7 @@ const registerNewUser = async (rawUserData) => {
       first_name: rawUserData.firstname,
       last_name: rawUserData.lastname,
       userId: userId,
-      roleId: 4,
+      roleId: 3,
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
     });

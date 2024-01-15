@@ -70,8 +70,8 @@ const handleLogin = async (req, res) => {
     });
 
     if (!foundUser) {
-      return res.status(401).json({
-        EM: 'Unauthorized.', // error message
+      return res.status(404).json({
+        EM: 'Invalid username or password.', // error message
         EC: '-1', // error code (error = -1, success = 0)
         DT: '', // data
       });
@@ -120,7 +120,7 @@ const handleLogin = async (req, res) => {
       });
       // Include 'access_token' in the response headers
 
-      res.setHeader('Authorization', `Bearer ${result.access_token}`);
+      // res.setHeader('Authorization', `Bearer ${result.access_token}`);
     }
 
     // Exclude 'access_token' from DT before sending the response

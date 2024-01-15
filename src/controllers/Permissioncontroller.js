@@ -1,9 +1,9 @@
 /* eslint-disable prefer-const */
-import rolesAPIservice from '../service/permissionService.js';
-const RolesCreateFunc = async (req, res) => {
+import permissionsAPIservice from '../service/permissionService.js';
+const PermissionCreateFunc = async (req, res) => {
   try {
     // validate
-    let data = await rolesAPIservice.createNewRoles(req.body);
+    let data = await permissionsAPIservice.createNewPermission(req.body);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -19,7 +19,7 @@ const RolesCreateFunc = async (req, res) => {
   }
 };
 
-const RolesUpdateFunc = async (req, res) => {
+const PermissionUpdateFunc = async (req, res) => {
   try {
 
   } catch (error) {
@@ -27,9 +27,9 @@ const RolesUpdateFunc = async (req, res) => {
   }
 };
 
-const RolesDeleteFunc = async (req, res) => {
+const PermisionDeleteFunc = async (req, res) => {
   try {
-    let data = await rolesAPIservice.deleteRole(req.body.id);
+    let data = await permissionsAPIservice.deletePermission(req.body.id);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -45,9 +45,9 @@ const RolesDeleteFunc = async (req, res) => {
   }
 };
 
-const RolesReadFunc = async (req, res) => {
+const PermissionsReadFunc = async (req, res) => {
   try {
-    let data = await rolesAPIservice.getAllRoles();
+    let data = await permissionsAPIservice.getAllPermissions();
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -63,10 +63,10 @@ const RolesReadFunc = async (req, res) => {
   }
 };
 
-const RolesByGroup = async (req, res) => {
+const PermissionsByRole = async (req, res) => {
   try {
-    let id = req.params.groupId;
-    let data = await rolesAPIservice.getRolesByGroup(id);
+    let id = req.params.roleId;
+    let data = await permissionsAPIservice.getPermissionsByRole(id);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -82,9 +82,9 @@ const RolesByGroup = async (req, res) => {
   }
 };
 
-const AssignRoleToGroup = async (req, res) => {
+const AssignPermissionToRole = async (req, res) => {
   try {
-    let data = await rolesAPIservice.assignRoleToGroup(req.body.data);
+    let data = await permissionsAPIservice.assignPermissionToRole(req.body.data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -102,10 +102,10 @@ const AssignRoleToGroup = async (req, res) => {
 
 
 module.exports = {
-  RolesCreateFunc,
-  RolesUpdateFunc,
-  RolesDeleteFunc,
-  RolesReadFunc,
-  RolesByGroup,
-  AssignRoleToGroup,
+  PermissionCreateFunc,
+  PermissionUpdateFunc,
+  PermisionDeleteFunc,
+  PermissionsReadFunc,
+  PermissionsByRole,
+  AssignPermissionToRole,
 };

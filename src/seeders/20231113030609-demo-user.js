@@ -93,7 +93,7 @@ module.exports = {
             updatedAt: currentTimestamp,
           },
           {
-            url: '/admin/roles/create',
+            url: '/admin/permissions/create',
             description: 'create roles',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
@@ -111,8 +111,8 @@ module.exports = {
             updatedAt: currentTimestamp,
           },
           {
-            url: '/group/read',
-            description: 'read group',
+            url: '/roles/read',
+            description: 'read roles',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
@@ -129,25 +129,31 @@ module.exports = {
             updatedAt: currentTimestamp,
           },
           {
-            url: '/admin/roles/read',
+            url: '/admin/permissions/read',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            url: '/admin/roles/delete',
+            url: '/admin/permissions/delete',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            url: '/admin/roles/by-group',
+            url: '/admin/permissions/by-role',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
           {
-            url: '/admin/roles/assign-to-group',
+            url: '/admin/permissions/assign-to-role',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/admin/permissions/update',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
@@ -249,6 +255,12 @@ module.exports = {
           {
             roleId: 1,
             RolePermissionId: 13,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 14,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },

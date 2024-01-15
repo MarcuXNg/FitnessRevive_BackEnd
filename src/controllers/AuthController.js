@@ -6,10 +6,10 @@ import {getRolesWithUrl} from '../service/JWTservice.js';
 // handle Login
 const handleRefreshToken = async (req, res) => {
   try {
-    const cookies = req.cookies;
-    // Check if the jwt cookie is present
+    const cookies = req.cookies; // Check if the jwt cookie is present
 
     if (!cookies?.jwt) {
+      console.log('No JWT cookie found.');
       return res.status(401).json({
         EM: 'Unauthorized.', // error message
         EC: '-1', // error code (error = -1, success = 0)
@@ -17,51 +17,43 @@ const handleRefreshToken = async (req, res) => {
     }
 
     const refreshToken = cookies.jwt;
-    res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true});
+    await res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true});
 
     const foundRefreshToken = await db.JWTs.findOne({
       where: {refreshToken: refreshToken},
     });
 
-    const foundUser = await db.User.findOne({
-      where: {id: foundRefreshToken.userId},
-      include: [{model: db.UserProfile}],
-    });
-    console.log(foundUser.dataValues.UserProfile.dataValues);
     // Detect refreshToken reuse!
     if (!foundRefreshToken) {
-      try {
-        jwt.verify(
-            refreshToken,
-            process.env.REFRESH_JWT_SECRET,
-            async (err, decoded) => {
-              if (err) {
-                return res.status(403).json({
-                  EM: 'Forbidden.', // error message
-                  EC: '-1', // error code (error = -1, success = 0)
-                });
-              } // Forbidden
+      jwt.verify(
+          refreshToken,
+          process.env.REFRESH_JWT_SECRET,
+          async (err, decoded) => {
+            if (err) {
+              console.log('Error decoding token:', err);
+              return res.status(403).json({
+                EM: 'attempted refresh token reuse!', // error message
+                EC: '-1', // error code (error = -1, success = 0)
+              });
+            } // Forbidden
 
-              // Delete all refresh tokens for the hacked user
-              await db.JWTs.destroy({where: {userId: foundUser.userId}});
-            },
-        );
-        return res.status(403).json({
-          EM: 'Forbidden.', // error message
-          EC: '-1', // error code (error = -1, success = 0)
-        });
-      } catch (error) {
-        console.log(error);
-        return res.status(401).json({
-          EC: -1,
-          DT: '',
-          EM: 'Not authenticated user',
-        });
-      }
+            // Delete all refresh tokens for the hacked user
+            await db.JWTs.destroy({where: {userId: decoded.userId}});
+          },
+      );
+      return res.status(403).json({
+        EM: 'Forbidden.', // error message
+        EC: '-1', // error code (error = -1, success = 0)
+      });
     } // Unauthorized
 
 
     try {
+      const foundUser = await db.User.findOne({
+        where: {id: foundRefreshToken.userId},
+        include: [{model: db.UserProfile}],
+      });
+
       // Evaluate jwt
       jwt.verify(
           refreshToken,
@@ -106,10 +98,10 @@ const handleRefreshToken = async (req, res) => {
             await foundRefreshToken.update({refreshToken: newRefreshToken});
 
             // Set a new secure cookie with the new refresh token
-            res.cookie('jwt', newRefreshToken, {httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000});
+            await res.cookie('jwt', newRefreshToken, {httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000});
 
             // Send the new access token to the user
-            res.json({
+            await res.json({
               EM: 'okela!',
               EC: 0,
               DT: {
@@ -123,13 +115,14 @@ const handleRefreshToken = async (req, res) => {
       );
     } catch (error) {
       // console.log(error);
-      return res.status(401).json({
+      return res.status(403).json({
         EC: -1,
         DT: '',
-        EM: 'Not authenticated user',
+        EM: 'Forbidden.',
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       EM: 'error from server', // error message
       EC: '-1', // error code (error = -1, success = 0)

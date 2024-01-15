@@ -18,12 +18,12 @@ sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   define: {
     freezeTableName: dbConfig.freezeTableName,
   },
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    // idle: dbConfig.pool.idle,
-  },
+  // pool: {
+  //   max: dbConfig.pool.max,
+  //   min: dbConfig.pool.min,
+  //   acquire: dbConfig.pool.acquire,
+  //   // idle: dbConfig.pool.idle,
+  // },
   logging: dbConfig.logging,
 });
 

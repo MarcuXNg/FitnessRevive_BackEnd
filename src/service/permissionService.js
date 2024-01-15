@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import db from '../models/index';
 
-const createNewRoles = async (roles) => {
+const createNewPermission = async (roles) => {
   try {
     let currentRoles = await db.RolePermission.findAll({
       attributes: ['url', 'description'],
@@ -34,7 +34,7 @@ const createNewRoles = async (roles) => {
   }
 };
 
-const getAllRoles = async () => {
+const getAllPermissions = async () => {
   try {
     let data = await db.RolePermission.findAll({
       order: [['id', 'DESC']],
@@ -54,7 +54,7 @@ const getAllRoles = async () => {
   }
 };
 
-const deleteRole = async (id) => {
+const deletePermission = async (id) => {
   try {
     let role = await db.RolePermission.findOne({
       where: {id: id},
@@ -77,11 +77,11 @@ const deleteRole = async (id) => {
   }
 };
 
-const getRolesByGroup = async (id) => {
+const getPermissionsByRole = async (id) => {
   try {
     if (!id) {
       return {
-        EM: 'Roles not found',
+        EM: 'Permission not found',
         EC: 0,
         DT: [],
       };
@@ -99,7 +99,7 @@ const getRolesByGroup = async (id) => {
 
     if (roles) {
       return {
-        EM: 'Get Roles by group successfully',
+        EM: 'Get permissions by role successfully',
         EC: 0,
         DT: roles,
       };
@@ -114,16 +114,16 @@ const getRolesByGroup = async (id) => {
   }
 };
 
-const assignRoleToGroup = async (data) => {
+const assignPermissionToRole = async (data) => {
   try {
     await db.Permission.destroy({
       where: {
         roleId: +data.roleId,
       },
     });
-    await db.Permission.bulkCreate(data.Permission);
+    await db.Permission.bulkCreate(data.rolePermissions);
     return {
-      EM: 'Assign Roles to group successfully',
+      EM: 'Assign Permissions to role successfully',
       EC: 0,
       DT: [],
     };
@@ -138,9 +138,9 @@ const assignRoleToGroup = async (data) => {
 };
 
 module.exports = {
-  createNewRoles,
-  getAllRoles,
-  deleteRole,
-  getRolesByGroup,
-  assignRoleToGroup,
+  createNewPermission,
+  getAllPermissions,
+  deletePermission,
+  getPermissionsByRole,
+  assignPermissionToRole,
 };
