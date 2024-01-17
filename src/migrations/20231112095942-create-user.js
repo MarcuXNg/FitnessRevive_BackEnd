@@ -213,7 +213,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
 
-      user_profile_id: {
+      user_profileId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -224,10 +224,10 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       height: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       weight: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       bmi: {
         type: Sequelize.FLOAT,
@@ -237,6 +237,15 @@ module.exports = {
       },
       activity_level: {
         type: Sequelize.STRING,
+      },
+      calories_goal: {
+        type: Sequelize.FLOAT,
+      },
+      tdee: {
+        type: Sequelize.FLOAT,
+      },
+      water_intake: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -307,7 +316,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      meals_id: {
+      mealsId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -317,7 +326,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      exercises_id: {
+      exercisesId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -327,7 +336,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      body_vitals_log_id: {
+      bodyVitalLogId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -338,16 +347,16 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       log_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       calories_consumed_per_day: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       calories_burnt_per_day: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
-      calories_goal: {
-        type: Sequelize.INTEGER,
+      weight_per_day: {
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,

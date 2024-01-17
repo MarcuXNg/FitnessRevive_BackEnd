@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
   DailyLog.init(
       {
         log_date: DataTypes.DATE,
-        calories_comsumed_per_day: DataTypes.INTEGER,
-        calories_burned_per_day: DataTypes.INTEGER,
-        calories_goal: DataTypes.INTEGER,
+        calories_comsumed_per_day: DataTypes.FLOAT,
+        calories_burned_per_day: DataTypes.FLOAT,
+        weight_per_day: DataTypes.FLOAT,
       },
       {
         sequelize,

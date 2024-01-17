@@ -8,6 +8,7 @@ import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; //
 import {PermissionCreateFunc, PermissionsReadFunc, PermisionDeleteFunc, PermissionUpdateFunc, PermissionsByRole, AssignPermissionToRole} from '../controllers/Permissioncontroller.js'; // Permissions
 import {handleRefreshToken} from '../controllers/AuthController.js'; // auth handle refresh
 import {roleReadFunc} from '../controllers/RoleController.js'; // Role
+import {saveBMIBMR, saveGoal, getGoal} from '../controllers/BodyVitals.js';
 import express from 'express';
 const router = express.Router();
 
@@ -43,6 +44,9 @@ const initWebRoutes = (app) => {
   router.delete('/users/delete', userDelete);
   router.get('/users/count', userCount);
   router.get('/users/count-per-week', userCountPerWeek);
+  router.post('/users/bmi-bmr/save', saveBMIBMR);
+  router.post('/users/goal/save', saveGoal);
+  router.get('/users/goal/get', getGoal);
 
 
   return app.use('/api/v1/', router);

@@ -158,6 +158,24 @@ module.exports = {
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
+          {
+            url: '/users/bmi-bmr/save',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/users/goal/save',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/users/goal/get',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
         ], {});
 
     await queryInterface.bulkInsert('permission',
@@ -261,6 +279,30 @@ module.exports = {
           {
             roleId: 1,
             RolePermissionId: 14,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 1,
+            RolePermissionId: 15,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 15,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 16,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 17,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },

@@ -15,16 +15,19 @@ module.exports = (sequelize, DataTypes) => {
 
   BodyVitalLog.init(
       {
-        height: DataTypes.INTEGER,
-        weight: DataTypes.INTEGER,
+        height: DataTypes.FLOAT,
+        weight: DataTypes.FLOAT,
         bmi: DataTypes.FLOAT,
         bmr: DataTypes.FLOAT,
         activity_level: DataTypes.STRING,
+        calories_goal: DataTypes.FLOAT,
+        tdee: DataTypes.FLOAT,
+        water_intake: DataTypes.INTEGER,
       },
       {
         sequelize,
         modelName: 'BodyVitalLog',
-        tableName: 'body_vital_log',
+        tableName: 'body_vitals_log',
       },
   );
 
