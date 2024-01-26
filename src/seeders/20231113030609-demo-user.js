@@ -210,6 +210,19 @@ module.exports = {
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
+          {
+            url: '/user/meals/date',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/exercises/date',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          
         ], {});
 
     await queryInterface.bulkInsert('permission',
@@ -355,6 +368,18 @@ module.exports = {
           {
             roleId: 3,
             RolePermissionId: 20,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 21,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 22,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
