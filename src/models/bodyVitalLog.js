@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         bmr: DataTypes.FLOAT,
         activity_level: DataTypes.STRING,
         calories_goal: DataTypes.FLOAT,
+        weight_goal: DataTypes.INTEGER,
         tdee: DataTypes.FLOAT,
         water_intake: DataTypes.INTEGER,
       },

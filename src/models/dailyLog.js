@@ -10,25 +10,16 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-      DailyLog.hasMany(models.Meals, {
-        foreignKey: 'mealsId',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      });
-      DailyLog.hasMany(models.Exercises, {
-        foreignKey: 'exercisesId',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      });
     }
   }
 
   DailyLog.init(
       {
         log_date: DataTypes.DATE,
-        calories_comsumed_per_day: DataTypes.FLOAT,
-        calories_burned_per_day: DataTypes.FLOAT,
-        weight_per_day: DataTypes.FLOAT,
+        calories_consumed_per_day: DataTypes.FLOAT,
+        calories_burnt_per_day: DataTypes.FLOAT,
+        weight_per_day: DataTypes.INTEGER,
+        water_drink_per_day: DataTypes.INTEGER,
       },
       {
         sequelize,

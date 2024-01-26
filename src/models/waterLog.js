@@ -3,9 +3,9 @@
 'use strict';
 const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Exercises extends Model {
+  class WaterLog extends Model {
     static associate(models) {
-      Exercises.belongsTo(models.BodyVitalLog, {
+      WaterLog.belongsTo(models.BodyVitalLog, {
         foreignKey: 'bodyVitalLogId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -13,19 +13,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Exercises.init(
+  WaterLog.init(
       {
-        exercise_name: DataTypes.STRING,
-        calories: DataTypes.FLOAT,
-        duration: DataTypes.FLOAT,
+        water: DataTypes.INTEGER,
         log_date: DataTypes.DATE,
       },
       {
         sequelize,
-        modelName: 'Exercises',
-        tableName: 'exercises',
+        modelName: 'WaterLog',
+        tableName: 'WaterLog',
       },
   );
 
-  return Exercises;
+  return WaterLog;
 };

@@ -10,9 +10,11 @@ const hashUserPassword = (userPassword) => {
   return hashPassword;
 };
 
-const pass = 'admin';
+const adminPass = 'admin';
+const userPass = 'user';
 // checking user's password
-const hashPass = hashUserPassword(pass.toString());
+const AdminHashPass = hashUserPassword(adminPass.toString());
+const UserHashPass = hashUserPassword(userPass.toString());
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -32,7 +34,13 @@ module.exports = {
         [
           {
             email: 'admin',
-            enc_password: hashPass,
+            enc_password: AdminHashPass,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            email: 'user',
+            enc_password: UserHashPass,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
@@ -67,6 +75,14 @@ module.exports = {
             last_name: '',
             roleId: 1,
             userId: 1,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            first_name: 'user',
+            last_name: '',
+            roleId: 3,
+            userId: 2,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
@@ -172,6 +188,24 @@ module.exports = {
           },
           {
             url: '/users/goal/get',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/body/get',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/carloies/burned',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/dailylog/date',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
@@ -306,7 +340,24 @@ module.exports = {
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
-
+          {
+            roleId: 3,
+            RolePermissionId: 18,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 19,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 20,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
         ], {});
   },
 

@@ -8,7 +8,7 @@ import {checkUserJWT, checkUserPermission} from '../middleware/JWTAction.js'; //
 import {PermissionCreateFunc, PermissionsReadFunc, PermisionDeleteFunc, PermissionUpdateFunc, PermissionsByRole, AssignPermissionToRole} from '../controllers/Permissioncontroller.js'; // Permissions
 import {handleRefreshToken} from '../controllers/AuthController.js'; // auth handle refresh
 import {roleReadFunc} from '../controllers/RoleController.js'; // Role
-import {saveBMIBMR, saveGoal, getGoal} from '../controllers/BodyVitals.js';
+import {saveBMIBMR, saveGoal, getGoal, getBody, saveCaloriesBurned, getDaily, getMeals, getExercises} from '../controllers/BodyVitals.js';
 import express from 'express';
 const router = express.Router();
 
@@ -47,6 +47,11 @@ const initWebRoutes = (app) => {
   router.post('/users/bmi-bmr/save', saveBMIBMR);
   router.post('/users/goal/save', saveGoal);
   router.get('/users/goal/get', getGoal);
+  router.get('/user/body/get', getBody);
+  router.get('/user/dailylog/date/:date', getDaily);
+  router.get('/user/meals/date/:date', getMeals);
+  router.get('/user/exercises/date/:date', getExercises);
+  router.post('/user/carloies/burned/:date', saveCaloriesBurned);
 
 
   return app.use('/api/v1/', router);

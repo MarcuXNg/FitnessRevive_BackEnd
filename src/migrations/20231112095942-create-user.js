@@ -241,6 +241,9 @@ module.exports = {
       calories_goal: {
         type: Sequelize.FLOAT,
       },
+      weight_goal: {
+        type: Sequelize.INTEGER,
+      },
       tdee: {
         type: Sequelize.FLOAT,
       },
@@ -264,6 +267,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      bodyVitalLogId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'body_vitals_log',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       meal_type: {
         type: Sequelize.STRING,
       },
@@ -271,7 +284,19 @@ module.exports = {
         type: Sequelize.STRING,
       },
       calories: {
+        type: Sequelize.FLOAT,
+      },
+      protein: {
         type: Sequelize.INTEGER,
+      },
+      fat: {
+        type: Sequelize.INTEGER,
+      },
+      carbon: {
+        type: Sequelize.INTEGER,
+      },
+      log_date: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
@@ -290,14 +315,27 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      exercise_type: {
-        type: Sequelize.STRING,
+      bodyVitalLogId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'body_vitals_log',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       exercise_name: {
         type: Sequelize.STRING,
       },
       calories: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
+      },
+      duration: {
+        type: Sequelize.FLOAT,
+      },
+      log_date: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
@@ -316,26 +354,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      mealsId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'meals',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      exercisesId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'exercises',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
       bodyVitalLogId: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -351,12 +369,55 @@ module.exports = {
       },
       calories_consumed_per_day: {
         type: Sequelize.FLOAT,
+        allowNull: true,
+        defaultValue: 0,
       },
       calories_burnt_per_day: {
         type: Sequelize.FLOAT,
+        allowNull: true,
+        defaultValue: 0,
       },
       weight_per_day: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+      },
+      water_drink_per_day: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+    await queryInterface.createTable('WaterLog', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      bodyVitalLogId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'body_vitals_log',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      log_date: {
+        type: Sequelize.DATEONLY,
+      },
+      water: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -368,6 +429,8 @@ module.exports = {
       },
     });
   },
+
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('user_account');
     await queryInterface.dropTable('user_profile');

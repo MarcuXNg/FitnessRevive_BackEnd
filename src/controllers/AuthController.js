@@ -38,7 +38,14 @@ const handleRefreshToken = async (req, res) => {
             } // Forbidden
 
             // Delete all refresh tokens for the hacked user
-            await db.JWTs.destroy({where: {userId: decoded.userId}});
+            if (decoded.userId) {
+              await db.JWTs.destroy({where: {userId: decoded.userId}});
+            } else {
+              return res.status(403).json({
+                EM: 'Forbidden.',
+                EC: '-1',
+              });
+            }
           },
       );
       return res.status(403).json({
@@ -64,7 +71,7 @@ const handleRefreshToken = async (req, res) => {
               await foundRefreshToken.destroy();
             }
 
-            if (err || foundUser.dataValues.email !== decoded.email) {
+            if (err || foundUser.dataValues.email !== decoded.email || foundUser.email !== decoded.email) {
               return res.status(403).json({
                 EM: 'Forbidden.', // error message
                 EC: '-1', // error code (error = -1, success = 0)
@@ -101,7 +108,7 @@ const handleRefreshToken = async (req, res) => {
             await res.cookie('jwt', newRefreshToken, {httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000});
 
             // Send the new access token to the user
-            await res.json({
+            return res.json({
               EM: 'okela!',
               EC: 0,
               DT: {
