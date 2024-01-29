@@ -199,7 +199,7 @@ module.exports = {
             updatedAt: currentTimestamp,
           },
           {
-            url: '/user/carloies/burned',
+            url: '/user/calories/burned',
             description: '',
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
@@ -222,7 +222,48 @@ module.exports = {
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },
-          
+          {
+            url: '/user/calories/consumed',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/water/drink',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/water/delete',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/water/consumed/week',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/water/consumed/week',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/weight/month',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            url: '/user/calo/week',
+            description: '',
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
         ], {});
 
     await queryInterface.bulkInsert('permission',
@@ -380,6 +421,48 @@ module.exports = {
           {
             roleId: 3,
             RolePermissionId: 22,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 23,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 24,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 25,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 26,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 27,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 28,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
+          },
+          {
+            roleId: 3,
+            RolePermissionId: 29,
             createdAt: currentTimestamp,
             updatedAt: currentTimestamp,
           },

@@ -248,7 +248,7 @@ module.exports = {
         type: Sequelize.FLOAT,
       },
       water_intake: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,
@@ -287,13 +287,16 @@ module.exports = {
         type: Sequelize.FLOAT,
       },
       protein: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       fat: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       carbon: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
+      },
+      gam: {
+        type: Sequelize.FLOAT,
       },
       log_date: {
         type: Sequelize.DATE,
@@ -377,13 +380,28 @@ module.exports = {
         allowNull: true,
         defaultValue: 0,
       },
+      carbs_consumed_per_day: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      fat_consumed_per_day: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      protein_consumed_per_day: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+        defaultValue: 0,
+      },
       weight_per_day: {
         type: Sequelize.INTEGER,
         allowNull: true,
         defaultValue: null,
       },
       water_drink_per_day: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
         defaultValue: 0,
       },

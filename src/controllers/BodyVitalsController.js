@@ -1,8 +1,9 @@
 import bodyApi from '../service/bodyVitalsService.js';
-// handle Login
+// handle 
 const saveBMIBMR = async (req, res) => {
   try {
-    const data = await bodyApi.bmibmrSave(req.body, req.user.email);
+    const date = req.params.date;
+    const data = await bodyApi.bmibmrSave(req.body, req.user.email, date);
     console.log(data);
     return res.status(200).json({
       EM: data.EM,
@@ -74,24 +75,6 @@ const getBody = async (req, res) => {
   }
 };
 
-const saveCaloriesBurned = async (req, res) => {
-  try {
-    const date = req.params.date;
-    const data = await bodyApi.caloriesBurnedSave(req.body, req.user.email, date);
-    return res.status(200).json({
-      EM: data.EM,
-      EC: data.EC,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      EM: 'error from server', // error message
-      EC: '-1', // error code (error = -1, success = 0)
-      DT: '', // data
-    });
-  }
-}
 
 const getDaily = async (req, res) => {
   try {
@@ -113,11 +96,11 @@ const getDaily = async (req, res) => {
   }
 }
 
-const getMeals = async (req, res) => {
+const getWaterConsumptionPerDay = async (req, res) => {
   try {
     // console.log(req.params.date);
     const date = req.params.date;
-    const data = await bodyApi.getMeals(date, req.user.email);
+    const data = await bodyApi.getWaterDrinkByDay(date, req.user.email);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -133,11 +116,30 @@ const getMeals = async (req, res) => {
   }
 }
 
-const getExercises = async (req, res) => {
+const getCaloPerDay = async (req, res) => {
   try {
-    // console.log(req.params.date);
     const date = req.params.date;
-    const data = await bodyApi.getExercises(date, req.user.email);
+    const data = await bodyApi.getCaloByDay(date, req.user.email);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      EM: 'error from server', // error message
+      EC: '-1', // error code (error = -1, success = 0)
+      DT: '', // data
+    });
+  }
+}
+
+
+const getWeightByMonth = async (req, res) => {
+  try {
+    const date = req.params.date;
+    const data = await bodyApi.getWeightByMonth(date, req.user.email);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -158,8 +160,8 @@ module.exports = {
   saveGoal,
   getGoal,
   getBody,
-  saveCaloriesBurned,
   getDaily,
-  getMeals,
-  getExercises,
+  getWaterConsumptionPerDay,
+  getWeightByMonth,
+  getCaloPerDay,
 };

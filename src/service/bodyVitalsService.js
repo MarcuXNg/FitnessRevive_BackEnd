@@ -1,7 +1,8 @@
-import db from '../models/index';
-import {Op} from 'sequelize';
+import db from "../models/index";
+import { Op } from "sequelize";
+const { startOfWeek, endOfWeek } = require("date-fns");
 
-const bmibmrSave = async (data, email) => {
+const bmibmrSave = async (data, email, date) => {
   try {
     // const vietnamTimezone = 'Asia/Ho_Chi_Minh';
     // const options = {timeZone: vietnamTimezone, day: '2-digit', month: '2-digit', year: 'numeric'};
@@ -18,7 +19,7 @@ const bmibmrSave = async (data, email) => {
 
     if (!user) {
       return {
-        EM: 'User not found',
+        EM: "User not found",
         EC: 1,
         DT: [],
       };
@@ -32,12 +33,12 @@ const bmibmrSave = async (data, email) => {
 
     if (!userProfile) {
       return {
-        EM: 'User not found',
+        EM: "User not found",
         EC: 1,
         DT: [],
       };
     }
-
+    const logDate = new Date(date);
     const logData = await db.BodyVitalLog.findOne({
       where: {
         user_profileId: userProfile.id,
@@ -55,13 +56,31 @@ const bmibmrSave = async (data, email) => {
         weight: +data.weight,
       });
 
+      const dailylogData = await db.DailyLog.findOne({
+        where: {
+          log_date: logDate,
+          bodyVitalLogId: logData.id,
+        },
+      });
+      if (dailylogData) {
+        await dailylogData.update({
+          weight_per_day: +data.weight,
+        });
+      } else {
+        await db.DailyLog.create({
+          log_date: logDate,
+          bodyVitalLogId: logData.id,
+          weight_per_day: +data.weight,
+        });
+      }
+
       return {
-        EM: 'Save Successfully',
+        EM: "Save Successfully",
         EC: 0,
         DT: [],
       };
     } else {
-      await db.BodyVitalLog.create({
+      const bodyData = await db.BodyVitalLog.create({
         bmi: +data.bmi,
         bmr: +data.bmr,
         tdee: +data.tdee,
@@ -71,16 +90,32 @@ const bmibmrSave = async (data, email) => {
         weight: +data.weight,
         user_profileId: userProfile.id,
       });
-
+      const dailylogData = await db.DailyLog.findOne({
+        where: {
+          log_date: logDate,
+          bodyVitalLogId: bodyData.id,
+        },
+      });
+      if (dailylogData) {
+        await dailylogData.update({
+          weight_per_day: +data.weight,
+        });
+      } else {
+        await db.DailyLog.create({
+          log_date: logDate,
+          bodyVitalLogId: bodyData.id,
+          weight_per_day: +data.weight,
+        });
+      }
       return {
-        EM: 'Save successfully',
+        EM: "Save successfully",
         EC: 0,
-        DT: '',
+        DT: "",
       };
     }
   } catch (error) {
     return {
-      EM: 'Something wrong with service',
+      EM: "Something wrong with service",
       EC: 1,
       DT: [],
     };
@@ -99,7 +134,7 @@ const goalSave = async (data, email) => {
 
     if (!user) {
       return {
-        EM: 'User not found',
+        EM: "User not found",
         EC: 1,
         DT: [],
       };
@@ -113,7 +148,7 @@ const goalSave = async (data, email) => {
 
     if (!userProfile) {
       return {
-        EM: 'User not found',
+        EM: "User not found",
         EC: 1,
         DT: [],
       };
@@ -127,9 +162,10 @@ const goalSave = async (data, email) => {
     if (logData) {
       logData.update({
         calories_goal: data.goal,
+        weight_goal: data.weight,
       });
       return {
-        EM: 'Set goal Successfully',
+        EM: "Set goal Successfully",
         EC: 0,
         DT: [],
       };
@@ -140,14 +176,14 @@ const goalSave = async (data, email) => {
       });
 
       return {
-        EM: 'Set goal successfully',
+        EM: "Set goal successfully",
         EC: 0,
-        DT: '',
+        DT: "",
       };
     }
   } catch (error) {
     return {
-      EM: 'Something wrong with service',
+      EM: "Something wrong with service",
       EC: 1,
       DT: [],
     };
@@ -173,9 +209,9 @@ const getCaloriesGoal = async (email) => {
     });
     if (data) {
       return {
-        EM: 'Get goal successfully',
+        EM: "Get goal successfully",
         EC: 0,
-        DT: data.calories_goal,
+        DT: data,
       };
     } else {
       return {
@@ -186,9 +222,9 @@ const getCaloriesGoal = async (email) => {
     }
   } catch (error) {
     return {
-      EM: 'Something wrong with service',
+      EM: "Something wrong with service",
       EC: 1,
-      DT: '',
+      DT: "",
     };
   }
 };
@@ -215,112 +251,17 @@ const getBodyVitals = async (email) => {
       return {
         EM: `Please update your body vitals information`,
         EC: 1,
-        DT: '',
+        DT: "",
       };
     }
     return {
-      EM: 'Get data successfully',
+      EM: "Get data successfully",
       EC: 0,
       DT: data,
     };
   } catch (error) {
     return {
-      EM: 'Something wrong with service',
-      EC: 1,
-      DT: [],
-    };
-  }
-};
-
-const caloriesBurnedSave = async (data, email, date) => {
-  try {
-    const user = await db.User.findOne({
-      where: {
-        email: email,
-      },
-    });
-    const userProfile = await db.UserProfile.findOne({
-      where: {
-        userId: user.id,
-      },
-    });
-    const bodyVitalData = await db.BodyVitalLog.findOne({
-      where: {
-        user_profileId: userProfile.id,
-      },
-    });
-    
-    const logDate = new Date(date);
-    if (bodyVitalData) {
-      const existingRecord = await db.DailyLog.findOne({
-        where: {
-          log_date: logDate,
-          bodyVitalLogId: bodyVitalData.id,
-        },
-        // logging: console.log, // Enable logging
-      });
-
-      if (existingRecord) {
-        // A record already exists for the given date and bodyVitalLogId
-        const existingCalories = parseInt(existingRecord.calories_burnt_per_day, 10) || 0;
-        const dataCalories = parseInt(data.calories, 10) || 0;
-        await existingRecord.update({
-          calories_burnt_per_day: existingCalories + dataCalories
-        });
-
-        await db.Exercises.create({
-          bodyVitalLogId: bodyVitalData.id,
-          exercise_name: data.name,
-          calories: data.calories,
-          duration: data.duration,
-          log_date: logDate,
-        })
-
-        return {
-          EM: `add successfully`,
-          EC: 0,
-          DT: [],
-        };
-      } else {
-        // No record found, create a new one
-        const newRecord = await db.DailyLog.create({
-          log_date: date,
-          bodyVitalLogId: bodyVitalData.id,
-          calories_consumed_per_day: 0,
-          calories_burnt_per_day: 0,
-          weight_per_day: 0,
-          water_drink_per_day: 0,
-        });
-        
-        await newRecord.update({
-          calories_burnt_per_day: existingRecord.calories_burnt_per_day + data.calories
-        });
-
-        await db.Exercises.create({
-          bodyVitalLogId: bodyVitalData.id,
-          exercise_name: data.name,
-          calories: data.calories,
-          duration: data.duration,
-          log_date: logDate,
-        })
-        
-        return {
-          EM: `add successfully`,
-          EC: 0,
-          DT: [],
-        };
-      }
-    } else {
-      return {
-        EM: `Please update your body vitals information`,
-        EC: 1,
-        DT: '',
-      };
-    }
-
-  } catch (error) {
-    return {
-      EM: 'Something wrong with service',
+      EM: "Something wrong with service",
       EC: 1,
       DT: [],
     };
@@ -382,19 +323,72 @@ const dailyGet = async (date, email) => {
       return {
         EM: `Please update your body vitals information`,
         EC: 1,
-        DT: '',
+        DT: "",
       };
     }
   } catch (error) {
     return {
-      EM: 'Something wrong with service',
+      EM: "Something wrong with service",
       EC: 1,
       DT: [],
     };
   }
-}
+};
 
-const getMeals = async (date, email) => {
+const getWeightByMonth = async (date, email) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        email: email,
+      },
+    });
+    const userProfile = await db.UserProfile.findOne({
+      where: {
+        userId: user.id,
+      },
+    });
+    const bodyVitalData = await db.BodyVitalLog.findOne({
+      where: {
+        user_profileId: userProfile.id,
+      },
+    });
+    const monthlyData = [];
+
+    for (let month = 0; month < 12; month++) {
+      const dateString = new Date(date);
+      const year = dateString.getFullYear();
+
+      const lastDayOfMonth = new Date(year, month + 1, 1);
+      lastDayOfMonth.setUTCHours(0, 0, 0, 0); // Set UTC hours, minutes, seconds, and milliseconds to zero
+      
+      const monthlyWeight = await db.DailyLog.findOne({
+        attributes: ["log_date", "weight_per_day"],
+        where: {
+          bodyVitalLogId: bodyVitalData.id,
+          log_date: lastDayOfMonth,
+        },
+      });
+
+      monthlyData.push(monthlyWeight);
+    }
+    return {
+      EM: `Ok`,
+      EC: 0,
+      DT: monthlyData,
+    };
+  } catch (error) {
+    console.error("Error fetching water drink data:", error);
+    throw error;
+  }
+};
+
+const getStartAndEndOfWeek = async (date) => {
+  const startDate = startOfWeek(date, { weekStartsOn: 0 }); // Assuming Monday is the first day of the week
+  const endDate = endOfWeek(date, { weekStartsOn: 0 });
+  return { startDate, endDate };
+};
+
+const getWaterDrinkByDay = async (date, email) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -412,47 +406,31 @@ const getMeals = async (date, email) => {
       },
     });
     const logDate = new Date(date);
+    const { startDate, endDate } = await getStartAndEndOfWeek(logDate);
     if (bodyVitalData) {
-      const existingRecord = await db.Meals.findOne({
+      // Query the daily_log table for the specified user
+      const waterDrinkData = await db.DailyLog.findAll({
+        attributes: ["id", "log_date", "water_drink_per_day"],
         where: {
-          log_date: logDate,
           bodyVitalLogId: bodyVitalData.id,
+          log_date: {
+            [db.Sequelize.Op.between]: [startDate, endDate],
+          },
         },
-        // logging: console.log, // Enable logging
       });
-
-      if (existingRecord) {
-        // A record already exists for the given date and bodyVitalLogId
-        return {
-          EM: `Get data successfully`,
-          EC: 0,
-          DT: existingRecord,
-        };
-      } else {
-        return {
-          EM: `No meals`,
-          EC: 0,
-          DT: [],
-        }
-      }
-    } else {
       return {
-        EM: `Please update your body vitals information`,
-        EC: 1,
-        DT: '',
+        EM: `New record created successfully`,
+        EC: 0,
+        DT: waterDrinkData,
       };
     }
-
   } catch (error) {
-    return {
-      EM: 'Something wrong with service',
-      EC: 1,
-      DT: [],
-    };
+    console.error("Error fetching water drink data:", error);
+    throw error;
   }
-}
+};
 
-const getExercises = async (date, email) => {
+const getCaloByDay = async (date, email) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -470,61 +448,27 @@ const getExercises = async (date, email) => {
       },
     });
     const logDate = new Date(date);
+    const { startDate, endDate } = await getStartAndEndOfWeek(logDate);
     if (bodyVitalData) {
-      const existingRecord = await db.Exercises.findAll({
+      // Query the daily_log table for the specified user
+      const data = await db.DailyLog.findAll({
+        attributes: ["id", "log_date", "calories_consumed_per_day", "calories_burnt_per_day", "carbs_consumed_per_day", "fat_consumed_per_day", "protein_consumed_per_day"],
         where: {
-          log_date: logDate,
           bodyVitalLogId: bodyVitalData.id,
+          log_date: {
+            [db.Sequelize.Op.between]: [startDate, endDate],
+          },
         },
-        // logging: console.log, // Enable logging
       });
-
-      if (existingRecord) {
-        // A record already exists for the given date and bodyVitalLogId
-        return {
-          EM: `Get data successfully`,
-          EC: 0,
-          DT: existingRecord,
-        };
-      } else {
-        return {
-          EM: `No Exercises`,
-          EC: 0,
-          DT: [],
-        }
-      }
-    } else {
       return {
-        EM: `Please update your body vitals information`,
-        EC: 1,
-        DT: '',
+        EM: `New record created successfully`,
+        EC: 0,
+        DT: data,
       };
     }
-
   } catch (error) {
-    return {
-      EM: 'Something wrong with service',
-      EC: 1,
-      DT: [],
-    };
-  }
-}
-
-const getWeightByMonth = async () => {
-  try {
-    const currentDate = new Date();
-    const startOfPreviousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-
-    await db.BodyVitalLog.findAll({
-      where: {
-        updatedAt: {
-          [Op.gte]: startOfPreviousMonth,
-          [Op.lt]: currentDate,
-        },
-      },
-    });
-  } catch (error) {
-
+    console.error("Error fetching water drink data:", error);
+    throw error;
   }
 };
 
@@ -534,8 +478,7 @@ module.exports = {
   getWeightByMonth,
   getCaloriesGoal,
   getBodyVitals,
-  caloriesBurnedSave,
   dailyGet,
-  getMeals,
-  getExercises,
+  getWaterDrinkByDay,
+  getCaloByDay,
 };

@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         calories_goal: DataTypes.FLOAT,
         weight_goal: DataTypes.INTEGER,
         tdee: DataTypes.FLOAT,
-        water_intake: DataTypes.INTEGER,
+        water_intake: DataTypes.FLOAT,
       },
       {
         sequelize,

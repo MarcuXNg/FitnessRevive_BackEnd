@@ -18,8 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         log_date: DataTypes.DATE,
         calories_consumed_per_day: DataTypes.FLOAT,
         calories_burnt_per_day: DataTypes.FLOAT,
+        carbs_consumed_per_day: DataTypes.FLOAT,
+        fat_consumed_per_day: DataTypes.FLOAT,
+        protein_consumed_per_day: DataTypes.FLOAT,
         weight_per_day: DataTypes.INTEGER,
-        water_drink_per_day: DataTypes.INTEGER,
+        water_drink_per_day: DataTypes.FLOAT,
       },
       {
         sequelize,

@@ -18,9 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         meal_type: DataTypes.STRING,
         meal_name: DataTypes.STRING,
         calories: DataTypes.FLOAT,
-        protein: DataTypes.INTEGER,
-        fat: DataTypes.INTEGER,
-        carbon: DataTypes.INTEGER,
+        protein: DataTypes.FLOAT,
+        fat: DataTypes.FLOAT,
+        gam: DataTypes.FLOAT,
+        carbon: DataTypes.FLOAT,
         log_date: DataTypes.DATE,
       },
       {
