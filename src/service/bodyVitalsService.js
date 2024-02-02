@@ -355,7 +355,9 @@ const getWeightByMonth = async (date, email) => {
     const monthlyData = [];
 
     for (let month = 0; month < 12; month++) {
+
       const dateString = new Date(date);
+      // console.log(dateString);
       const year = dateString.getFullYear();
 
       const lastDayOfMonth = new Date(year, month + 1, 1);
@@ -368,8 +370,11 @@ const getWeightByMonth = async (date, email) => {
           log_date: lastDayOfMonth,
         },
       });
+      // console.log(monthlyWeight);
 
-      monthlyData.push(monthlyWeight);
+      if (monthlyWeight) {
+        monthlyData.push(monthlyWeight);
+      }
     }
     return {
       EM: `Ok`,

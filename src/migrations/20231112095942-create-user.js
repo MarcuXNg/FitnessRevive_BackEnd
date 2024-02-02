@@ -398,7 +398,7 @@ module.exports = {
       weight_per_day: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: null,
+        defaultValue: 0,
       },
       water_drink_per_day: {
         type: Sequelize.FLOAT,
